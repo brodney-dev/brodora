@@ -1,28 +1,28 @@
 {
-  "name": "@brodora/ui",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Shared UI components for the Brodora ecosystem.",
-  "license": "MIT",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "typescript": "^6.0.2"
-  },
-  "dependencies": {
-    "radix-ui": "^1.4.3"
-  }
+	"name": "@brodora/ui",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Shared UI components for the Brodora ecosystem.",
+	"license": "MIT",
+	"main": "./src/index.ts",
+	"module": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0"
+	},
+	"devDependencies": {
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"typescript": "^6.0.2"
+	},
+	"dependencies": {
+		"@brodora/icons": "workspace:*"
+	}
 }

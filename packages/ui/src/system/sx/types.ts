@@ -6,34 +6,34 @@ export type SxThemeResolver<T> = (theme: Theme) => T;
 
 /** Shorthand keys (`m`, `p`, `bgcolor`, …) before theme-aware wrapping. */
 export interface SxShorthandBase {
-  m?: number | string;
-  mt?: number | string;
-  mr?: number | string;
-  mb?: number | string;
-  ml?: number | string;
-  mx?: number | string;
-  my?: number | string;
-  p?: number | string;
-  pt?: number | string;
-  pr?: number | string;
-  pb?: number | string;
-  pl?: number | string;
-  px?: number | string;
-  py?: number | string;
-  /** Sets `backgroundColor`. */
-  bgcolor?: string;
+	m?: number | string;
+	mt?: number | string;
+	mr?: number | string;
+	mb?: number | string;
+	ml?: number | string;
+	mx?: number | string;
+	my?: number | string;
+	p?: number | string;
+	pt?: number | string;
+	pr?: number | string;
+	pb?: number | string;
+	pl?: number | string;
+	px?: number | string;
+	py?: number | string;
+	/** Sets `backgroundColor`. */
+	bgcolor?: string;
 }
 
 export type SxShorthandProps = {
-  [K in keyof SxShorthandBase]?:
-    | SxShorthandBase[K]
-    | SxThemeResolver<NonNullable<SxShorthandBase[K]>>;
+	[K in keyof SxShorthandBase]?:
+		| SxShorthandBase[K]
+		| SxThemeResolver<NonNullable<SxShorthandBase[K]>>;
 };
 
 type CssSx = {
-  [K in keyof CSSProperties]?:
-    | CSSProperties[K]
-    | SxThemeResolver<NonNullable<CSSProperties[K]>>;
+	[K in keyof CSSProperties]?:
+		| CSSProperties[K]
+		| SxThemeResolver<NonNullable<CSSProperties[K]>>;
 };
 
 /**

@@ -2,5 +2,5 @@
 export const defaultSpacingUnit = 8;
 
 export function createSpacing(spacingUnit: number): (value: number) => string {
-  return (value: number) => `${value * spacingUnit}px`;
+	return (value: number) => `${value * spacingUnit}px`;
 }
