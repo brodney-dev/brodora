@@ -1,4 +1,4 @@
-import type * as React from "react";
+import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
@@ -10,24 +10,21 @@ export interface ButtonProps
 	sx?: SxProps;
 }
 
-export function Button({
-	children,
-	startNode,
-	endNode,
-	disabled,
-	style,
-	sx,
-	...props
-}: ButtonProps) {
-	const { colors, action } = useTheme();
-	const sxStyles = useSxStyles(sx);
-	const isDisabled = Boolean(disabled);
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+	function Button(
+		{ children, startNode, endNode, disabled, style, sx, ...props },
+		ref,
+	) {
+		const { colors, action } = useTheme();
+		const sxStyles = useSxStyles(sx);
+		const isDisabled = Boolean(disabled);
 
-	return (
-		<button
-			{...props}
-			disabled={isDisabled}
-			style={{
+		return (
+			<button
+				ref={ref}
+				{...props}
+				disabled={isDisabled}
+				style={{
 				padding: "0.5rem 1rem",
 				borderRadius: "0.5rem",
 				display: "flex",
@@ -57,4 +54,7 @@ export function Button({
 			{endNode && <span>{endNode}</span>}
 		</button>
 	);
-}
+	},
+);
+
+Button.displayName = "Button";
