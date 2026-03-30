@@ -53,7 +53,7 @@ Both UI packages are **TypeScript** source exports (`"main"` / `"types"` point a
 Clone the repository:
 
 ```bash
-git clone git@github.com:YOUR_USERNAME/brodora.git
+git clone git@github.com:brodney-dev/brodora.git
 cd brodora
 ```
 
