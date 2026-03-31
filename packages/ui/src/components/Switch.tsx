@@ -55,8 +55,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 		const [internalChecked, setInternalChecked] = React.useState(
 			() => defaultChecked === true,
 		);
-		const checked =
-			checkedProp !== undefined ? checkedProp : internalChecked;
+		const checked = checkedProp !== undefined ? checkedProp : internalChecked;
 
 		const handleChange = React.useCallback(
 			(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,12 +128,10 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 		return (
 			<span className={className} style={rootStyle}>
 				<span style={trackStyle}>
-					<span aria-hidden style={thumbStyle} />
+					<span style={thumbStyle} />
 					<input
 						ref={setRefs}
 						type="checkbox"
-						role="switch"
-						aria-checked={on}
 						disabled={isDisabled}
 						checked={on}
 						onChange={handleChange}

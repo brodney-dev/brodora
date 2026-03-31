@@ -101,7 +101,6 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 						{...selectProps}
 						className={selectClassName}
 						disabled={isDisabled}
-						aria-invalid={error ? true : undefined}
 						onFocus={(e) => {
 							selectProps.onFocus?.(e);
 							setFocused(true);
@@ -112,7 +111,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 						}}
 						style={selectStyle}
 					/>
-					<span style={iconWrapStyle} aria-hidden>
+					<span style={iconWrapStyle}>
 						<ChevronDown size={18} strokeWidth={2} />
 					</span>
 				</div>

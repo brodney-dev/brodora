@@ -81,9 +81,7 @@ export function Tabs({
 		[value, setValue, baseId, registerTab, unregisterTab],
 	);
 
-	return (
-		<TabsContext.Provider value={ctx}>{children}</TabsContext.Provider>
-	);
+	return <TabsContext.Provider value={ctx}>{children}</TabsContext.Provider>;
 }
 
 export interface TabListProps
@@ -140,8 +138,7 @@ export function TabList({
 		(which: "first" | "last") => {
 			const order = tabOrderRef.current;
 			if (order.length === 0) return;
-			const seq =
-				which === "first" ? [...order] : [...order].reverse();
+			const seq = which === "first" ? [...order] : [...order].reverse();
 			for (const v of seq) {
 				const el = tabElementsRef.current.get(v);
 				if (el && isTabEnabled(el)) {
@@ -177,7 +174,6 @@ export function TabList({
 
 	return (
 		<div
-			role="tablist"
 			className={className}
 			style={listStyle}
 			{...props}
@@ -195,82 +191,77 @@ export interface TabProps
 	style?: React.CSSProperties;
 }
 
-export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
-	function Tab(
-		{ value: tabValue, sx, style, className, children, disabled, ...btnProps },
-		ref,
-	) {
-		const ctx = useTabsContext("Tab");
-		const { colors, shape } = useTheme();
-		const sxStyles = useSxStyles(sx);
-		const selected = ctx.value === tabValue;
-		const tabId = `${ctx.baseId}-tab-${tabValue}`;
-		const panelId = `${ctx.baseId}-panel-${tabValue}`;
+export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(function Tab(
+	{ value: tabValue, sx, style, className, children, disabled, ...btnProps },
+	ref,
+) {
+	const ctx = useTabsContext("Tab");
+	const { colors, shape } = useTheme();
+	const sxStyles = useSxStyles(sx);
+	const selected = ctx.value === tabValue;
+	const tabId = `${ctx.baseId}-tab-${tabValue}`;
+	const panelId = `${ctx.baseId}-panel-${tabValue}`;
 
-		const setRefs = React.useCallback(
-			(node: HTMLButtonElement | null) => {
-				ctx.registerTab(tabValue, node);
-				if (typeof ref === "function") ref(node);
-				else if (ref)
-					(ref as React.MutableRefObject<HTMLButtonElement | null>).current =
-						node;
-			},
-			[ctx, ref, tabValue],
-		);
+	const setRefs = React.useCallback(
+		(node: HTMLButtonElement | null) => {
+			ctx.registerTab(tabValue, node);
+			if (typeof ref === "function") ref(node);
+			else if (ref)
+				(ref as React.MutableRefObject<HTMLButtonElement | null>).current =
+					node;
+		},
+		[ctx, ref, tabValue],
+	);
 
-		React.useEffect(() => {
-			const order = ctx.tabOrderRef.current;
-			if (!order.includes(tabValue)) {
-				order.push(tabValue);
-			}
-			return () => {
-				ctx.unregisterTab(tabValue);
-			};
-		}, [ctx, tabValue]);
-
-		const tabStyle: React.CSSProperties = {
-			position: "relative",
-			padding: "0.5rem 0.75rem",
-			marginBottom: -1,
-			fontSize: "0.875rem",
-			fontWeight: selected ? 600 : 500,
-			lineHeight: 1.25,
-			color: selected ? colors.primary[700] : colors.secondary[600],
-			background: "transparent",
-			border: "none",
-			borderBottom: selected
-				? `2px solid ${colors.primary[600]}`
-				: "2px solid transparent",
-			borderRadius: `${shape.borderRadius}px ${shape.borderRadius}px 0 0`,
-			cursor: disabled ? "not-allowed" : "pointer",
-			opacity: disabled ? 0.5 : 1,
-			...sxStyles,
-			...style,
+	React.useEffect(() => {
+		const order = ctx.tabOrderRef.current;
+		if (!order.includes(tabValue)) {
+			order.push(tabValue);
+		}
+		return () => {
+			ctx.unregisterTab(tabValue);
 		};
+	}, [ctx, tabValue]);
 
-		return (
-			<button
-				ref={setRefs}
-				type="button"
-				role="tab"
-				id={tabId}
-				className={className}
-				aria-selected={selected}
-				aria-controls={panelId}
-				tabIndex={selected ? 0 : -1}
-				disabled={disabled}
-				style={tabStyle}
-				{...btnProps}
-				onClick={(e) => {
-					btnProps.onClick?.(e);
-					if (!disabled) ctx.setValue(tabValue);
-				}}
-			>
-				{children}
-			</button>
-		);
-	},
-);
+	const tabStyle: React.CSSProperties = {
+		position: "relative",
+		padding: "0.5rem 0.75rem",
+		marginBottom: -1,
+		fontSize: "0.875rem",
+		fontWeight: selected ? 600 : 500,
+		lineHeight: 1.25,
+		color: selected ? colors.primary[700] : colors.secondary[600],
+		background: "transparent",
+		border: "none",
+		borderBottom: selected
+			? `2px solid ${colors.primary[600]}`
+			: "2px solid transparent",
+		borderRadius: `${shape.borderRadius}px ${shape.borderRadius}px 0 0`,
+		cursor: disabled ? "not-allowed" : "pointer",
+		opacity: disabled ? 0.5 : 1,
+		...sxStyles,
+		...style,
+	};
+
+	return (
+		<button
+			ref={setRefs}
+			type="button"
+			id={tabId}
+			className={className}
+			tabIndex={selected ? 0 : -1}
+			disabled={disabled}
+			style={tabStyle}
+			{...btnProps}
+			onClick={(e) => {
+				btnProps.onClick?.(e);
+				if (!disabled) ctx.setValue(tabValue);
+			}}
+		>
+			{children}
+		</button>
+	);
+});
 
 Tab.displayName = "Tab";
 
@@ -294,7 +285,6 @@ export function TabPanel({
 	const { value, baseId } = useTabsContext("TabPanel");
 	const sxStyles = useSxStyles(sx);
 	const selected = value === panelValue;
-	const tabId = `${baseId}-tab-${panelValue}`;
 	const panelId = `${baseId}-panel-${panelValue}`;
 
 	const panelStyle: React.CSSProperties = {
@@ -309,9 +299,7 @@ export function TabPanel({
 
 	return (
 		<div
-			role="tabpanel"
 			id={panelId}
-			aria-labelledby={tabId}
 			hidden={!selected}
 			className={className}
 			style={panelStyle}

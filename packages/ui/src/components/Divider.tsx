@@ -17,16 +17,12 @@ export const Divider = React.forwardRef<HTMLHRElement, DividerProps>(
 			style,
 			className,
 			role = "separator",
-			"aria-orientation": ariaOrientationProp,
 			...props
 		},
 		ref,
 	) {
 		const { colors } = useTheme();
 		const sxStyles = useSxStyles(sx);
-		const ariaOrientation =
-			ariaOrientationProp ??
-			(orientation === "vertical" ? "vertical" : "horizontal");
 
 		const lineStyle: React.CSSProperties =
 			orientation === "vertical"
@@ -54,7 +50,6 @@ export const Divider = React.forwardRef<HTMLHRElement, DividerProps>(
 			<hr
 				ref={ref}
 				role={role}
-				aria-orientation={ariaOrientation}
 				className={className}
 				style={{ ...lineStyle, ...sxStyles, ...style }}
 				{...props}

@@ -114,7 +114,6 @@ export function RadioGroup({
 		<RadioGroupContext.Provider value={ctx}>
 			<div
 				ref={groupRef}
-				role="radiogroup"
 				className={className}
 				style={rootStyle}
 				{...props}
@@ -150,8 +149,12 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
 		},
 		ref,
 	) {
-		const { name, value: groupValue, setValue, disabled: groupDisabled } =
-			useRadioGroupContext("Radio");
+		const {
+			name,
+			value: groupValue,
+			setValue,
+			disabled: groupDisabled,
+		} = useRadioGroupContext("Radio");
 		const { colors, action } = useTheme();
 		const sxStyles = useSxStyles(sx);
 		const generatedId = React.useId();

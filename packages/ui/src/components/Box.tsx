@@ -1,7 +1,8 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
 
-export interface BoxProps extends Omit<React.HTMLAttributes<HTMLElement>, "style"> {
+export interface BoxProps
+	extends Omit<React.HTMLAttributes<HTMLElement>, "style"> {
 	/** Host element; default `div`. */
 	as?: keyof React.JSX.IntrinsicElements;
 	sx?: SxProps;

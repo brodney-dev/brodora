@@ -41,7 +41,7 @@ function GitHubButtonLink({ children }: { children: ReactNode }) {
 				e.currentTarget.style.borderColor = colors.primary[700];
 			}}
 		>
-			<GitBranch size={18} strokeWidth={2} aria-hidden />
+			<GitBranch size={18} strokeWidth={2} />
 			{children}
 		</a>
 	);

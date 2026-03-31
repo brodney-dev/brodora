@@ -139,7 +139,6 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 		return (
 			<span className={className} style={boxStyle}>
 				<span
-					aria-hidden
 					style={{
 						position: "absolute",
 						inset: 0,
@@ -151,9 +150,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 				>
 					{showIndicator &&
 						(isIndeterminate ? (
-							<Minus size={12} strokeWidth={2} aria-hidden />
+							<Minus size={12} strokeWidth={2} />
 						) : (
-							<Check size={12} strokeWidth={2} aria-hidden />
+							<Check size={12} strokeWidth={2} />
 						))}
 				</span>
 				<input

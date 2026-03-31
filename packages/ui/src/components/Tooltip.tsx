@@ -123,7 +123,6 @@ export function Tooltip({
 		<span style={wrapperStyle}>
 			{React.cloneElement(child, {
 				ref: mergeRefs(child.props.ref),
-				"aria-describedby": visible ? tipId : undefined,
 				onFocus: (e) => {
 					child.props.onFocus?.(e);
 					scheduleShow();
@@ -142,7 +141,7 @@ export function Tooltip({
 				},
 			})}
 			{visible && (
-				<span id={tipId} role="tooltip" style={tipStyle}>
+				<span id={tipId} style={tipStyle}>
 					{title}
 				</span>
 			)}

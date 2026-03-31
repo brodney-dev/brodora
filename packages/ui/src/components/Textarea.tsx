@@ -36,7 +36,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 		const [focused, setFocused] = React.useState(false);
 		const generatedId = React.useId();
 		const inputId = idProp ?? generatedId;
-		const helperId = `${inputId}-helper`;
 		const isDisabled = Boolean(disabled);
 		const showHelper = helperText != null && helperText !== "";
 
@@ -114,8 +113,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 					rows={rows}
 					className={textareaClassName}
 					disabled={isDisabled}
-					aria-invalid={error ? true : undefined}
-					aria-describedby={showHelper ? helperId : undefined}
 					onFocus={(e) => {
 						textareaProps.onFocus?.(e);
 						setFocused(true);
@@ -126,11 +123,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 					}}
 					style={fieldStyle}
 				/>
-				{showHelper && (
-					<span id={helperId} style={helperStyle}>
-						{helperText}
-					</span>
-				)}
+				{showHelper && <span style={helperStyle}>{helperText}</span>}
 			</div>
 		);
 	},

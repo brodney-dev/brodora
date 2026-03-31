@@ -58,16 +58,7 @@ export interface AlertProps
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 	function Alert(
-		{
-			variant = "info",
-			title,
-			children,
-			sx,
-			style,
-			className,
-			role,
-			...props
-		},
+		{ variant = "info", title, children, sx, style, className, role, ...props },
 		ref,
 	) {
 		const { colors, shape } = useTheme();
@@ -110,9 +101,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 				style={rootStyle}
 				{...props}
 			>
-				{title != null && title !== "" && (
-					<p style={titleStyle}>{title}</p>
-				)}
+				{title != null && title !== "" && <p style={titleStyle}>{title}</p>}
 				<div style={bodyStyle}>{children}</div>
 			</div>
 		);

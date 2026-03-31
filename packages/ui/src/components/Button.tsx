@@ -25,35 +25,35 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 				disabled={isDisabled}
 				style={{
-				padding: "0.5rem 1rem",
-				borderRadius: "0.5rem",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				gap: "0.5rem",
-				...(isDisabled
-					? {
-							border: `1px solid ${action.disabledBorder}`,
-							background: action.disabledBackground,
-							color: action.disabled,
-							opacity: action.disabledOpacity ?? 0.5,
-							cursor: "not-allowed",
-						}
-					: {
-							border: `1px solid ${colors.primary[700]}`,
-							background: colors.primary[600],
-							color: "#ffffff",
-							cursor: "pointer",
-						}),
-				...sxStyles,
-				...style,
-			}}
-		>
-			{startNode && <span>{startNode}</span>}
-			{children}
-			{endNode && <span>{endNode}</span>}
-		</button>
-	);
+					padding: "0.5rem 1rem",
+					borderRadius: "0.5rem",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					gap: "0.5rem",
+					...(isDisabled
+						? {
+								border: `1px solid ${action.disabledBorder}`,
+								background: action.disabledBackground,
+								color: action.disabled,
+								opacity: action.disabledOpacity ?? 0.5,
+								cursor: "not-allowed",
+							}
+						: {
+								border: `1px solid ${colors.primary[700]}`,
+								background: colors.primary[600],
+								color: "#ffffff",
+								cursor: "pointer",
+							}),
+					...sxStyles,
+					...style,
+				}}
+			>
+				{startNode && <span>{startNode}</span>}
+				{children}
+				{endNode && <span>{endNode}</span>}
+			</button>
+		);
 	},
 );
 

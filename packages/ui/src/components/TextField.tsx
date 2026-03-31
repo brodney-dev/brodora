@@ -37,7 +37,6 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 		const [focused, setFocused] = React.useState(false);
 		const generatedId = React.useId();
 		const inputId = idProp ?? generatedId;
-		const helperId = `${inputId}-helper`;
 		const isDisabled = Boolean(disabled);
 		const showHelper = helperText != null && helperText !== "";
 
@@ -112,8 +111,6 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 					id={inputId}
 					className={inputClassName}
 					disabled={isDisabled}
-					aria-invalid={error ? true : undefined}
-					aria-describedby={showHelper ? helperId : undefined}
 					onFocus={(e) => {
 						inputProps.onFocus?.(e);
 						setFocused(true);
@@ -124,11 +121,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 					}}
 					style={inputStyle}
 				/>
-				{showHelper && (
-					<span id={helperId} style={helperStyle}>
-						{helperText}
-					</span>
-				)}
+				{showHelper && <span style={helperStyle}>{helperText}</span>}
 			</div>
 		);
 	},
