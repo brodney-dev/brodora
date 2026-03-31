@@ -1,6 +1,0 @@
-{
-	"buildCommand": "pnpm --filter @brodora/website build",
-	"installCommand": "pnpm install --no-frozen-lockfile",
-	"outputDirectory": "apps/website/.next",
-	"framework": "nextjs"
-}
