@@ -8,15 +8,8 @@ body {
 	min-height: 100%;
 	line-height: 1.5;
 	font-family:
-		system-ui,
-		-apple-system,
-		BlinkMacSystemFont,
-		"Segoe UI",
-		Roboto,
-		Oxygen,
-		Ubuntu,
-		Cantarell,
-		sans-serif;
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, sans-serif;
 	text-rendering: optimizeLegibility;
 }
 

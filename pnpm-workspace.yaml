@@ -4,3 +4,8 @@ packages:
   - "packages/*"
   - "core/*"
   - "examples/*"
+allowBuilds:
+  electron: false
+  electron-winstaller: false
+  esbuild: false
+  sharp: false

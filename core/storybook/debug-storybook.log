@@ -1,35 +1,31 @@
-[14:12:06.521] [INFO] storybook v10.3.3
-[14:12:06.849] [DEBUG] Getting package.json info for /home/sandbox/Documents/brodora/apps/storybook/package.json...
-[14:12:06.850] [WARN] You are currently using Storybook [1m10.3.3[22m but you have packages which are incompatible with it:
+[22:08:04.297] [INFO] storybook v10.3.3
+[22:08:04.623] [DEBUG] Getting package.json info for /home/sandbox/Documents/brodora/core/storybook/package.json...
+[22:08:04.636] [ERROR] [38;2;241;97;97mSB_CORE-SERVER_0002 (CriticalPresetLoadError): Storybook failed to load the following preset: @storybook/react-vite/preset.
 
-- @storybook/addon-essentials@8.6.14 which depends on 8.6.14
- Repo: https://github.com/storybookjs/storybook/tree/next/code/addons/essentials
+Please check whether your setup is correct, the Storybook dependencies (and their peer dependencies) are installed correctly and there are no package version clashes.
 
-Please consider updating your packages or contacting the maintainers for compatibility details.
+If you believe this is a bug, please open an issue on Github.
 
-For more details on compatibility guidance, see:
-https://github.com/storybookjs/storybook/issues/32836
-[14:12:07.545] [INFO] Starting...
-[14:12:07.560] [WARN] No story files found for the specified pattern: [34msrc/**/*.mdx[39m
-[14:12:07.650] [ERROR] [38;2;241;97;97mSB_CORE-SERVER_0004 (NoMatchingExportError): There was an exports mismatch error when trying to build Storybook.
-Please check whether the versions of your Storybook packages match whenever possible, as this might be the cause.
-
-Problematic example:
-{ "@storybook/react": "7.5.3", "@storybook/react-vite": "7.4.5", "storybook": "7.3.0" }
-
-Correct example:
-{ "@storybook/react": "7.5.3", "@storybook/react-vite": "7.5.3", "storybook": "7.5.3" }
-
-Please run `npx storybook doctor` for guidance on how to fix this issue.
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@storybook/react-vite' imported from /home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-GMFDJH6Z.js
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at nextResolve (node:internal/modules/esm/hooks:864:28)
+    at Hooks.resolve (node:internal/modules/esm/hooks:306:30)
+    at handleMessage (node:internal/modules/esm/worker:196:24)
+    at checkForMessages (node:internal/modules/esm/worker:138:28)
+    at process.<anonymous> (node:internal/modules/esm/worker:157:5)
+    at process.emit (node:events:524:28)
 
 More info: 
 [39m
-    at buildOrThrow (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:4513:9)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async buildDevStandalone (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:8029:41)
-    at async withTelemetry (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-6PADJQ3N.js:218:12)
-    at async dev (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2736:3)
-    at async _Command.<anonymous> (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2806:92)
-[14:12:07.654] [WARN] Broken build, fix the error above.
+    at loadPreset (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:10081:13)
+    at async Promise.all (index 0)
+    at async loadPresets (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:10090:73)
+    at async getPresets (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:10121:23)
+    at async buildDevStandalone (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/core-server/index.js:7964:52)
+    at async withTelemetry (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-6PADJQ3N.js:218:12)
+    at async dev (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2736:3)
+    at async _Command.<anonymous> (file:///home/sandbox/Documents/brodora/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_prettier@3.8.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/bin/core.js:2806:92)
+[22:08:04.643] [WARN] Broken build, fix the error above.
 You may need to refresh the browser.
-[14:12:41.672] [PROMPT] Would you like to send anonymous crash reports to improve Storybook and fix bugs faster? {"choice":false}
