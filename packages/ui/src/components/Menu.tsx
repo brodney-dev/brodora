@@ -73,7 +73,7 @@ export interface MenuTriggerProps {
 }
 
 export function MenuTrigger({ children }: MenuTriggerProps) {
-	const { open, setOpen, triggerRef, menuId } = useMenuCtx("MenuTrigger");
+	const { open, setOpen, triggerRef } = useMenuCtx("MenuTrigger");
 	const child = React.Children.only(children) as React.ReactElement<TriggerEl>;
 
 	return React.cloneElement(child, {

@@ -200,7 +200,6 @@ export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(function Tab(
 	const sxStyles = useSxStyles(sx);
 	const selected = ctx.value === tabValue;
 	const tabId = `${ctx.baseId}-tab-${tabValue}`;
-	const panelId = `${ctx.baseId}-panel-${tabValue}`;
 
 	const setRefs = React.useCallback(
 		(node: HTMLButtonElement | null) => {

@@ -76,8 +76,7 @@ export interface PopoverTriggerProps {
 }
 
 export function PopoverTrigger({ children }: PopoverTriggerProps) {
-	const { open, setOpen, triggerRef, contentId } =
-		usePopoverContext("PopoverTrigger");
+	const { open, setOpen, triggerRef } = usePopoverContext("PopoverTrigger");
 	const child = React.Children.only(children) as React.ReactElement<TriggerEl>;
 
 	return React.cloneElement(child, {

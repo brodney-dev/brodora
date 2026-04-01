@@ -1,6 +1,6 @@
+import { ThemeProvider } from "@brodora/ui";
 import type { Preview } from "@storybook/react";
 import * as React from "react";
-import { ThemeProvider } from "@brodora/ui";
 
 const preview: Preview = {
 	decorators: [
