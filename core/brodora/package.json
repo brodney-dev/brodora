@@ -15,7 +15,6 @@
 		"dev": "electron-vite dev -- --no-sandbox",
 		"build": "npm run typecheck && electron-vite build",
 		"postinstall": "electron-builder install-app-deps && node node_modules/electron/install.js",
-
 		"build:unpack": "npm run build && electron-builder --dir",
 		"build:win": "npm run build && electron-builder --win",
 		"build:mac": "electron-vite build && electron-builder --mac",
@@ -26,12 +25,18 @@
 		"@brodora/ui": "workspace:*",
 		"@electron-toolkit/preload": "^3.0.2",
 		"@electron-toolkit/utils": "^4.0.0",
-		"react-router-dom": "^7.13.2"
+		"better-sqlite3": "^12.8.0",
+		"drizzle-orm": "^0.45.2",
+		"fp-ts": "^2.16.11",
+		"react-router-dom": "^7.13.2",
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@electron-toolkit/eslint-config-prettier": "^3.0.0",
 		"@electron-toolkit/eslint-config-ts": "^3.1.0",
 		"@electron-toolkit/tsconfig": "^2.0.0",
+		"@types/better-sqlite3": "^7.6.13",
+		"@types/minimatch": "^5.1.2",
 		"@types/node": "^22.19.1",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
