@@ -1,14 +1,9 @@
 import type { ElectronAPI } from "@electron-toolkit/preload";
-
-export interface BrodoraPreloadAPI {
-	migration: {
-		listApplied: () => Promise<string[]>;
-	};
-}
+import type { CallableBrodoraApi } from "./api";
 
 declare global {
 	interface Window {
 		electron: ElectronAPI;
-		api: BrodoraPreloadAPI;
+		api: typeof CallableBrodoraApi;
 	}
 }

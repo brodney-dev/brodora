@@ -1,5 +1,7 @@
+import "reflect-metadata";
 import { join } from "node:path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
+import { NestFactory } from "@nestjs/core";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import icon from "../../resources/icon.png?asset";
 import { AppModule } from "./modules/app.module";
@@ -39,7 +41,7 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
 	// Set app user model id for windows
 	electronApp.setAppUserModelId("com.electron");
 
@@ -53,7 +55,14 @@ app.whenReady().then(() => {
 	// IPC test
 	ipcMain.on("ping", () => console.log("pong"));
 
-	AppModule.bootstrap(app.getPath("userData"));
+	const nestApp = await NestFactory.createApplicationContext(
+		AppModule.forRoot(app.getPath("userData")),
+		{ logger: ["verbose", "debug", "log", "warn", "error", "fatal"] },
+	);
+
+	app.on("before-quit", () => {
+		void nestApp.close();
+	});
 
 	createWindow();
 

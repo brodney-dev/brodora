@@ -1,23 +1,18 @@
-import { initDatabase } from "../system/db";
-import type { MainContext } from "../system/types/context";
-import type { Module } from "../system/types/module";
+import { type DynamicModule, Module } from "@nestjs/common";
+import { DatabaseModule } from "./database/database.module";
 import { MigrationModule } from "./migration/migration.module";
+import { SettingsModule } from "./settings/settings.module";
 
-const Modules: (typeof Module)[] = [MigrationModule];
-/**
- * Root module for the Electron main process (Nest-style bootstrap).
- * Add further `MigrationModule.register(ctx)`-style calls here as the app grows.
- */
-export const AppModule = {
-	bootstrap(userDataDir: string): MainContext {
-		const brodoraDatabase = initDatabase({ userDataDir });
-
-		const ctx: MainContext = { brodoraDatabase };
-
-		Modules.forEach((Module) => {
-			new Module(ctx);
-		});
-
-		return ctx;
-	},
-};
+@Module({})
+export class AppModule {
+	static forRoot(userDataDir: string): DynamicModule {
+		return {
+			module: AppModule,
+			imports: [
+				DatabaseModule.forRoot(userDataDir),
+				MigrationModule,
+				SettingsModule,
+			],
+		};
+	}
+}

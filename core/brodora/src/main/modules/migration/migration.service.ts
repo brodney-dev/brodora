@@ -1,15 +1,20 @@
+import { Inject, Injectable, type OnModuleInit } from "@nestjs/common";
+import { MigrationApi } from "../../../shared/api/migration.api";
 import type { BrodoraDatabase } from "../../system/db";
-import { handleInternalApi } from "../../system/types/api";
-import { MigrationApi } from "./migration.api";
+import { handleBrodoraApi } from "../../system/types/api";
+import { BRODORA_DATABASE } from "../database/database.tokens";
 
-export class MigrationService {
-	constructor(private readonly brodoraDatabase: BrodoraDatabase) {}
+@Injectable()
+export class MigrationService implements OnModuleInit {
+	constructor(
+		@Inject(BRODORA_DATABASE) private readonly brodoraDatabase: BrodoraDatabase,
+	) {}
 
-	public registerApis(): void {
-		handleInternalApi(MigrationApi.isMigrated, () => {
+	onModuleInit(): void {
+		handleBrodoraApi(MigrationApi.isMigrated, () => {
 			return this.isMigrated();
 		});
-		handleInternalApi(MigrationApi.isMigrationApplied, ({ name }) => {
+		handleBrodoraApi(MigrationApi.isMigrationApplied, ({ name }) => {
 			return this.isMigrationApplied(name);
 		});
 	}
