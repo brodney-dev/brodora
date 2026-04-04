@@ -8,38 +8,38 @@ import {
 	Typography,
 	useTheme,
 } from "@brodora/ui";
+import * as O from "fp-ts/Option";
 import * as React from "react";
 
-export const USERNAME_SETTING_KEY = "username";
-
-type IntroUsernamePageProps = {
+type IntroWorkspacePageProps = {
 	onComplete: () => void;
 };
 
-export function IntroUsernamePage({ onComplete }: IntroUsernamePageProps) {
+export function IntroWorkspacePage({ onComplete }: IntroWorkspacePageProps) {
 	const { colors } = useTheme();
-	const [username, setUsername] = React.useState("");
+	const [name, setName] = React.useState("");
 	const [error, setError] = React.useState<string | null>(null);
 	const [submitting, setSubmitting] = React.useState(false);
 
 	async function handleSubmit(e: React.FormEvent): Promise<void> {
 		e.preventDefault();
-		const trimmed = username.trim();
+		const trimmed = name.trim();
 		if (!trimmed) {
-			setError("Enter a username to continue.");
+			setError("Enter a workspace name to continue.");
 			return;
 		}
 		setError(null);
 		setSubmitting(true);
 		try {
-			await window.api.settings.set({
-				key: USERNAME_SETTING_KEY,
-				value: trimmed,
-			});
+			const created = await window.api.users.create({ name: trimmed });
+			if (O.isNone(created)) {
+				setError("Could not create workspace. Try again.");
+				return;
+			}
+			void window.api.users.recordAccess({ id: created.value.id });
 			onComplete();
-		} catch (error) {
-			console.error("Error saving username", error);
-			setError("Could not save. Try again.");
+		} catch {
+			setError("Could not create workspace. Try again.");
 		} finally {
 			setSubmitting(false);
 		}
@@ -74,14 +74,14 @@ export function IntroUsernamePage({ onComplete }: IntroUsernamePageProps) {
 									style={{ margin: 0 }}
 									sx={{ color: (theme) => theme.colors.secondary[600] }}
 								>
-									Choose a username to get started. You can change it later in
-									settings.
+									Create your first workspace. You can add more later; there is
+									no sign-in.
 								</Typography>
 							</div>
 							<TextField
-								label="Username"
-								value={username}
-								onChange={(ev) => setUsername(ev.target.value)}
+								label="Workspace name"
+								value={name}
+								onChange={(ev) => setName(ev.target.value)}
 								autoFocus
 								fullWidth
 								disabled={submitting}
@@ -89,7 +89,7 @@ export function IntroUsernamePage({ onComplete }: IntroUsernamePageProps) {
 								helperText={error ?? undefined}
 							/>
 							<Button type="submit" disabled={submitting}>
-								{submitting ? "Saving…" : "Continue"}
+								{submitting ? "Creating…" : "Continue"}
 							</Button>
 						</Stack>
 					</form>

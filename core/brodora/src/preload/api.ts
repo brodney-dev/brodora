@@ -46,6 +46,5 @@ export const setupBrodoraApi = <
 };
 
 export const CallableBrodoraApi = {
-	settings: setupBrodoraApi(BrodoraApi.settings),
-	migration: setupBrodoraApi(BrodoraApi.migration),
+	users: setupBrodoraApi(BrodoraApi.users),
 };

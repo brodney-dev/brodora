@@ -1,21 +1,41 @@
-import { type DynamicModule, Global, Module } from "@nestjs/common";
-import { initDatabase } from "../../system/db/index";
-import { BRODORA_DATABASE } from "./database.tokens";
+import { mkdirSync } from "node:fs";
+import { join } from "node:path";
+import { type DynamicModule, Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { app } from "electron";
+import { User } from "../users/user.entity";
 
-@Global()
 @Module({})
 export class DatabaseModule {
 	static forRoot(userDataDir: string): DynamicModule {
+		const storageDir = join(userDataDir, "storage");
+		const database = join(storageDir, "brodora.sqlite");
+		const isDev = !app.isPackaged;
+
 		return {
 			global: true,
 			module: DatabaseModule,
-			providers: [
-				{
-					provide: BRODORA_DATABASE,
-					useFactory: () => initDatabase({ userDataDir }),
-				},
+			imports: [
+				TypeOrmModule.forRootAsync({
+					useFactory: () => {
+						mkdirSync(storageDir, { recursive: true });
+						return {
+							type: "better-sqlite3" as const,
+							database,
+							entities: [User],
+							migrations: isDev
+								? ["src/main/migrations/*.ts"]
+								: ["dist/main/migrations/*.js"],
+							migrationsTableName: "migrations",
+							synchronize: false,
+							migrationsRun: true,
+							logging: false,
+							enableWAL: true,
+						};
+					},
+				}),
 			],
-			exports: [BRODORA_DATABASE],
+			exports: [TypeOrmModule],
 		};
 	}
 }

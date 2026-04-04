@@ -4,7 +4,6 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const NAV: { path: string; label: string }[] = [
 	{ path: "/", label: "Home" },
 	{ path: "/library", label: "Library" },
-	{ path: "/settings", label: "Settings" },
 ];
 
 function pathIsActive(currentPath: string, navPath: string): boolean {

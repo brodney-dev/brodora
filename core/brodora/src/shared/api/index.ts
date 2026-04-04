@@ -1,7 +1,5 @@
-import { MigrationApi } from "./migration.api";
-import { SettingsApi } from "./settings.api";
+import { UsersApi } from "./users.api";
 
 export const BrodoraApi = {
-	settings: SettingsApi,
-	migration: MigrationApi,
+	users: UsersApi,
 };

@@ -27,11 +27,12 @@
 		"@electron-toolkit/utils": "^4.0.0",
 		"@nestjs/common": "^11.1.17",
 		"@nestjs/core": "^11.1.17",
+		"@nestjs/typeorm": "^11.0.1",
 		"better-sqlite3": "^12.8.0",
-		"drizzle-orm": "^0.45.2",
 		"fp-ts": "^2.16.11",
 		"react-router-dom": "^7.13.2",
 		"reflect-metadata": "^0.2.2",
+		"typeorm": "^0.3.28",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {

@@ -4,19 +4,10 @@ import * as React from "react";
 import { Route, Routes } from "react-router-dom";
 import { AppLayout } from "./AppLayout";
 import { HomePage } from "./pages/HomePage";
-import {
-	IntroUsernamePage,
-	USERNAME_SETTING_KEY,
-} from "./pages/IntroUsernamePage";
+import { IntroWorkspacePage } from "./pages/IntroWorkspacePage";
 import { LibraryPage } from "./pages/LibraryPage";
-import { SettingsPage } from "./pages/SettingsPage";
 
 type AppGate = "loading" | "intro" | "ready";
-
-function hasUsernameSetting(rows: { key: string; value: string }[]): boolean {
-	const row = rows.find((r) => r.key === USERNAME_SETTING_KEY);
-	return Boolean(row?.value?.trim());
-}
 
 export default function App() {
 	const [gate, setGate] = React.useState<AppGate>("loading");
@@ -24,17 +15,23 @@ export default function App() {
 	React.useEffect(() => {
 		let cancelled = false;
 		(async () => {
-			const rows = await window.api.settings.getAll();
-			if (O.isNone(rows)) {
-				setGate("intro");
-				return;
-			}
-
+			const listed = await window.api.users.list();
 			if (cancelled) {
 				return;
 			}
-			const hasUsername = hasUsernameSetting(rows.value);
-			setGate(hasUsername ? "ready" : "intro");
+			if (O.isNone(listed)) {
+				setGate("intro");
+				return;
+			}
+			if (listed.value.length === 0) {
+				setGate("intro");
+				return;
+			}
+			const first = listed.value[0];
+			if (first) {
+				void window.api.users.recordAccess({ id: first.id });
+			}
+			setGate("ready");
 		})().catch(() => {
 			if (!cancelled) {
 				setGate("intro");
@@ -61,7 +58,7 @@ export default function App() {
 	}
 
 	if (gate === "intro") {
-		return <IntroUsernamePage onComplete={() => setGate("ready")} />;
+		return <IntroWorkspacePage onComplete={() => setGate("ready")} />;
 	}
 
 	return (
@@ -69,7 +66,6 @@ export default function App() {
 			<Route path="/" element={<AppLayout />}>
 				<Route index element={<HomePage />} />
 				<Route path="library" element={<LibraryPage />} />
-				<Route path="settings" element={<SettingsPage />} />
 			</Route>
 		</Routes>
 	);

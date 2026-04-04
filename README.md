@@ -1,36 +1,77 @@
 # Brodora
 
-**An open source, desktop-native personal acceleration system.**
-
-Brodora is a platform built on Electron where tools compound together. The base install is intentionally lightweight — a runtime and marketplace for apps and plugins. You install what you need, enable it, and your Brodora grows with you.
+Brodora is an open source desktop platform built on Electron: the installer, launcher, and foundation for desktop apps. Think Steam, but for any kind of app.
 
 ---
 
-## How it works
+## What Brodora Is
 
-Brodora has three building blocks:
+Brodora itself is lightweight by design. It's not a shell that apps live inside: it's the platform that gets them installed, keeps them up to date, and boots them when you need them. Each app runs as its own instance, the same way a game launched from Steam runs independently of Steam itself.
 
-**Brodora itself** is the core — the runtime, the marketplace, the installer. On its own it's minimal. Its job is to be the foundation everything else runs on.
-
-**Apps** are self-contained capability units. Install a blog writing app and it becomes a first-class part of your Brodora — its own navigation item, its own logic, fully integrated rather than bolted on.
-
-**Plugins** are behavior modifiers. They attach to an existing app (or to Brodora itself) and extend or alter how it works. An SEO checker plugin for your blog app, for example. Plugins don't stand alone — they enhance what's already there.
+What Brodora brings to every app is the foundation: shared systems for storage, authentication, and more. Developers aren't rebuilding the same infrastructure from scratch, and users get a consistent experience across everything they install.
 
 ---
 
-## What's in this repo
+## How It Works
 
-This is a **pnpm** monorepo (`pnpm-workspace.yaml`) containing Brodora core and all Brodora-native apps and plugins. These are the reference implementations — built by the Brodora team, open source, and available by default in the marketplace.
+**Brodora** is the launcher and foundation. It handles discovery, installation, updates, and booting apps. It also exposes the core systems every app can build on. On its own, Brodora is minimal: its value is in what it enables.
+
+**Apps** are independent, self-contained desktop applications installed and launched through Brodora. Each app boots its own instance: they don't share a window or bolt onto a common shell. Apps are built by the Brodora team or third-party developers, distributed through the marketplace, and can tap into Brodora's core systems.
+
+**Plugins** are behavior modifiers that extend a specific app. They attach to an app (or to Brodora itself) and alter how it works. Plugins don't run standalone: they require a target to modify.
+
+---
+
+## Core Systems
+
+Every app installed through Brodora has access to a set of shared foundational systems. These are provided by Brodora so apps don't have to solve them independently:
+
+- **Storage**: A structured, shared data layer available to all apps
+- **Authentication**: Identity and session management without each app rolling its own
+- **UI primitives**: A shared component library (`@brodora/ui`) for building interfaces that feel consistent and native
+- **Inter-app communication**: APIs for apps to share context and data when needed
+
+> This list will grow as Brodora matures. These systems are what make building on Brodora meaningfully different from shipping a standalone Electron app.
+
+---
+
+## Developer Platform
+
+Building for Brodora is a first-class experience. Brodora provides the tooling to scaffold, develop, and distribute apps without figuring out the plumbing yourself:
+
+- **CLI tooling**: Scaffold a new app or plugin, run it locally, and publish it to the marketplace from the command line
+- **Local dev runtime**: Develop your app against a live Brodora instance with access to all core systems
+- **Distribution**: Package and submit your app to the marketplace, or distribute it directly via URL for sideloading
+- **`@brodora/ui`**: A full React component library so your app feels consistent with the Brodora ecosystem without building a design system from scratch
+- **Core system APIs**: Documented APIs for storage, auth, inter-app communication, and more. Ready to use with no setup.
+
+The goal is that a developer can go from idea to a published, installable Brodora app without touching anything outside the Brodora toolchain.
+
+---
+
+## The Marketplace
+
+Apps and plugins reach users through three paths:
+
+- **Brodora-native**: built by the Brodora team, open source, available by default
+- **Trusted third-party**: reviewed and approved external apps/plugins listed in the marketplace
+- **Direct install**: install anything directly by URL or file, no marketplace required
+
+---
+
+## What's in This Repo
+
+This is a **pnpm** monorepo (`pnpm-workspace.yaml`) containing Brodora core and all Brodora-native apps and plugins. These are the reference implementations: built by the Brodora team, open source, and available by default in the marketplace.
 
 ```
 brodora/
 ├── apps/          # Brodora-native applications
 ├── plugins/       # Brodora-native plugins
-├── core/          # Brodora itself — runtime, marketplace, installer
+├── core/          # Brodora itself: launcher, installer, core systems
 └── packages/      # Shared ecosystem tooling (@brodora/ui, @brodora/icons, and more)
 ```
 
-> **Third-party developers:** This repo is also your reference for building your own apps and plugins. The `packages/` directory contains tooling you can use, and the apps and plugins here show you how things fit together.
+> **Third-party developers:** This repo is your reference for building your own apps and plugins. The `packages/` directory contains tooling you can use, and the apps and plugins here show how things fit together.
 
 ---
 
@@ -43,37 +84,14 @@ brodora/
 
 Both packages are TypeScript source exports, ship under the **MIT** license, and target **React 18+ / 19**.
 
-### UI design choices
+### UI Design Choices
 
 - **Theme-driven styling** via `ThemeProvider` / `useTheme` and an **`sx`-style** helper for component-level layout and overrides.
 - **Storybook** documents components under `apps/storybook` for visual review and usage examples.
 
 ---
 
-## The marketplace
-
-Apps and plugins reach users through three paths:
-
-- **Brodora-native** — everything in this monorepo, available by default
-- **Trusted third-party** — reviewed and approved external apps/plugins listed in the marketplace
-- **Direct install** — install anything directly by URL or file, no marketplace required
-
----
-
-## Building for Brodora
-
-A few things to know before you build:
-
-- Apps integrate into the shared left navigation — they don't open new windows
-- Apps follow the install → enable flow before becoming active in a user's Brodora
-- Plugins must declare what app (or Brodora core) they target
-- The `packages/` directory has shared tooling — including a UI library — that you're welcome to use
-
-These conventions exist so that every app and plugin, regardless of who built it, feels like a natural part of the same system.
-
----
-
-## Getting started
+## Getting Started
 
 Clone the repository:
 
@@ -112,22 +130,22 @@ pnpm --filter @brodora/storybook build
 | --- | --- |
 | **pnpm** | Package manager (version pinned via `packageManager` in root `package.json`) |
 | **Biome** | Linting and formatting (`biome.json`), run via lint-staged on staged files |
-| **Husky + commitlint** | Git hooks — enforces conventional commits on `commit-msg`, runs lint-staged on pre-commit |
+| **Husky + commitlint** | Git hooks: enforces conventional commits on `commit-msg`, runs lint-staged on pre-commit |
 | **Commitizen + cz-git** | Guided commit messages via `pnpm commit` |
 
 ---
 
 ## Contributing
 
-Contributions, ideas, and feedback are welcome. Please run Biome on changed files (or rely on lint-staged) and follow the conventional commit format enforced by commitlint.
+Brodora is open source and contributions are welcome. That said, while the project is in early development the core team will be selective about what gets merged — the architecture and system contracts are still being defined, and changes need to stay coherent with the direction of the platform. If you're thinking about contributing something significant, opening a discussion first is the best way to avoid wasted effort.
 
-As Brodora grows, contribution guidelines will expand — for now, match existing patterns in `packages/ui` and keep changes focused and well-scoped.
+For smaller changes, match existing patterns in `packages/ui`, run Biome on changed files (or rely on lint-staged), and follow the conventional commit format enforced by commitlint.
 
 ---
 
 ## Status
 
-Brodora is in early development. Core architecture and the app/plugin system contracts are actively being established. Things will move fast and some surfaces will change — check back often.
+Brodora is in early development. Core architecture and the app/plugin system contracts are actively being established. Things will move fast and some surfaces will change: check back often.
 
 ---
 

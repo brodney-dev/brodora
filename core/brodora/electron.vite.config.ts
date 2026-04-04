@@ -6,7 +6,13 @@ export default defineConfig({
 	main: {
 		build: {
 			rollupOptions: {
-				external: ["better-sqlite3", "reflect-metadata", /^@nestjs\//],
+				external: [
+					"better-sqlite3",
+					"reflect-metadata",
+					/^@nestjs\//,
+					"typeorm",
+					/^typeorm\//,
+				],
 			},
 		},
 	},
