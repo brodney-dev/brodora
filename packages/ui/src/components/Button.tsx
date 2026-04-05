@@ -39,7 +39,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				disabled={isDisabled}
 				style={{
 					padding: "0.5rem 1rem",
-					borderRadius: "0.5rem",
+					borderRadius: "0.25rem",
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
@@ -63,7 +63,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				}}
 			>
 				{startNode && <span>{startNode}</span>}
-				{children}
+				<span
+					style={{
+						flex: 1,
+						minWidth: 0,
+						display: "flex",
+						justifyContent: "flex-start",
+					}}
+				>
+					{children}
+				</span>
 				{endNode && <span>{endNode}</span>}
 			</button>
 		);

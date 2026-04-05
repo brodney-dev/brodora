@@ -4,6 +4,10 @@ import { contextBridge, ipcRenderer } from "electron";
 import * as O from "fp-ts/Option";
 import { BrodoraApi } from "../shared/api";
 import {
+	BRODORA_IPC_LAUNCHED_APPS_CHANGED,
+	launchedAppsListSchema,
+} from "../shared/api/launched-apps";
+import {
 	BRODORA_IPC_USER_CHANGED,
 	type SessionUserState,
 	sessionUserStateSchema,
@@ -32,13 +36,25 @@ const brodoraIpc: BrodoraRendererIpc = {
 			ipcRenderer.removeListener(BRODORA_IPC_USER_CHANGED, listener);
 		};
 	},
+	onLaunchedAppsChanged(callback) {
+		const listener = (_event: Electron.IpcRendererEvent, payload: unknown) => {
+			const result = launchedAppsListSchema.safeParse(payload);
+			if (result.success) {
+				callback(result.data);
+			}
+		};
+		ipcRenderer.on(BRODORA_IPC_LAUNCHED_APPS_CHANGED, listener);
+		return () => {
+			ipcRenderer.removeListener(BRODORA_IPC_LAUNCHED_APPS_CHANGED, listener);
+		};
+	},
 };
 async function exposePreloadBridge(): Promise<void> {
-	const raw = await ipcRenderer.invoke(
+	const userRaw = await ipcRenderer.invoke(
 		BrodoraApi.users.getLoggedIn.getKey(),
 		undefined,
 	);
-	const user = parseSessionFromInvoke(raw);
+	const user = parseSessionFromInvoke(userRaw);
 
 	const api = {
 		...CallableBrodoraApi,

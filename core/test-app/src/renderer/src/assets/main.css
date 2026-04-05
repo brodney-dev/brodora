@@ -11,13 +11,16 @@ body {
 	overflow: hidden;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background-color: #000000;
+	color: #ffffff;
 }
 
 code {
 	font-weight: 600;
 	padding: 0.15rem 0.35rem;
 	border-radius: 0.25rem;
-	background-color: #f1f5f9;
+	background-color: #1a1a1a;
+	color: #e5e5e5;
 	font-family:
 		ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
 		monospace;

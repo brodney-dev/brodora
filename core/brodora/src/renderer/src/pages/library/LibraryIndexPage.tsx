@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@brodora/ui";
 
-export function LibraryPage() {
+export function LibraryIndexPage() {
 	return (
 		<Stack spacing={2} sx={{ p: 4, flex: 1 }}>
 			<Typography variant="h2" as="h1" style={{ margin: 0 }}>
@@ -12,7 +12,7 @@ export function LibraryPage() {
 				style={{ margin: 0 }}
 				sx={{ color: (theme) => theme.colors.secondary.onMain }}
 			>
-				Your library content will live here.
+				Select an installed app in the sidebar to open it and launch.
 			</Typography>
 		</Stack>
 	);

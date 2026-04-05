@@ -1,2 +1,3 @@
 export { AppLayout } from "./AppLayout";
-export { AppSideNav } from "./AppSideNav";
+export { AppSidebar } from "./AppSidebar";
+export { LibraryLayout } from "./LibraryLayout";

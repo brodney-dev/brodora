@@ -8,21 +8,21 @@ export const defaultThemeAction: ThemeAction = {
 	disabledOpacity: 0.5,
 };
 
-/** Default design tokens: dark app shell with readable contrasts on slate surfaces. */
+/** Default design tokens: black app shell, light text; inverse ramp for menus/tooltips. */
 export const defaultThemeColors: ThemeColors = {
 	primary: {
-		main: "#3b82f6",
+		main: "#408A71",
 		onMain: "#ffffff",
-		container: "#172554",
-		onContainer: "#93c5fd",
-		border: "#2563eb",
+		container: "#10221c",
+		onContainer: "#a8dcc8",
+		border: "#357a63",
 	},
 	secondary: {
-		main: "#334155",
-		onMain: "#cbd5e1",
-		container: "#1e293b",
-		onContainer: "#e2e8f0",
-		border: "#475569",
+		main: "#525252",
+		onMain: "#fafafa",
+		container: "#1c1c1c",
+		onContainer: "#e5e5e5",
+		border: "#404040",
 	},
 	error: {
 		main: "#ef4444",
@@ -53,27 +53,27 @@ export const defaultThemeColors: ThemeColors = {
 		border: "#fbbf24",
 	},
 	background: {
-		main: "#0f172a",
-		onMain: "#f1f5f9",
-		container: "#1e293b",
-		onContainer: "#e2e8f0",
-		border: "#334155",
+		main: "#000000",
+		onMain: "#ffffff",
+		container: "#161616",
+		onContainer: "#f5f5f5",
+		border: "#2a2a2a",
 	},
 	/** Dividers, chrome, and non-brand grays. */
 	neutral: {
-		main: "#64748b",
-		onMain: "#f8fafc",
-		container: "#1e293b",
-		onContainer: "#cbd5e1",
-		border: "#334155",
+		main: "#737373",
+		onMain: "#ffffff",
+		container: "#171717",
+		onContainer: "#d4d4d4",
+		border: "#404040",
 	},
 	/** Light / inverted surfaces (e.g. tooltips, menus on dark UI). */
 	inverse: {
-		main: "#f1f5f9",
-		onMain: "#0f172a",
-		container: "#ffffff",
-		onContainer: "#0f172a",
-		border: "#e2e8f0",
+		main: "#ffffff",
+		onMain: "#000000",
+		container: "#f5f5f5",
+		onContainer: "#0a0a0a",
+		border: "#e5e5e5",
 	},
 };
 
