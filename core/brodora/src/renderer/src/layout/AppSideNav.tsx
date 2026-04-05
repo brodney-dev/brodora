@@ -17,7 +17,6 @@ import {
 import * as O from "fp-ts/Option";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../user";
-import { useUserStore } from "../user/userStore";
 
 const MAIN_NAV: { path: string; label: string }[] = [
 	{ path: "/", label: "Home" },
@@ -45,14 +44,12 @@ export function AppSideNav() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const user = useUser();
-	const setSessionUser = useUserStore((s) => s.setSessionUser);
 
 	async function handleLogout(): Promise<void> {
 		const ok = await window.api.users.logout(undefined);
 		if (O.isNone(ok)) {
 			return;
 		}
-		setSessionUser(null);
 		navigate("/");
 	}
 
@@ -84,7 +81,7 @@ export function AppSideNav() {
 								style={{
 									width: "100%",
 									justifyContent: "space-between",
-									padding: "0.35rem 0.5rem",
+									padding: "0.05rem 0.25rem",
 									fontSize: "0.8125rem",
 								}}
 							>

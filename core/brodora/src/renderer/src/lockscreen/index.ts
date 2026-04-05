@@ -1,1 +1,1 @@
-export { LockScreen, type LockScreenProps } from "./LockScreen";
+export { LockScreen } from "./LockScreen";

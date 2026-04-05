@@ -4,6 +4,7 @@ import { IsNull, type Repository } from "typeorm";
 import { BrodoraApi } from "../../../shared/api";
 import type { UserRow } from "../../../shared/api/users.api";
 import { handleBrodoraApi } from "../../system/api/api";
+import { broadcastSessionUserState } from "../../system/ipc/broadcast-session-user";
 import { User } from "./user.entity";
 
 @Injectable()
@@ -50,7 +51,9 @@ export class UsersService implements OnModuleInit {
 			loggedIn: true,
 		});
 		const saved = await this.userRepo.save(entity);
-		return this.toRow(saved);
+		const row = this.toRow(saved);
+		broadcastSessionUserState({ id: row.id, name: row.name });
+		return row;
 	}
 
 	async recordAccess(id: number): Promise<void> {
@@ -89,6 +92,7 @@ export class UsersService implements OnModuleInit {
 			{ id, deletedAt: IsNull() },
 			{ loggedIn: true, updatedAt: now },
 		);
+		broadcastSessionUserState({ id, name: active.name });
 		return true;
 	}
 
@@ -99,6 +103,7 @@ export class UsersService implements OnModuleInit {
 			.update(User)
 			.set({ loggedIn: false, updatedAt: now })
 			.execute();
+		broadcastSessionUserState(null);
 	}
 
 	private toRow(u: User): UserRow {

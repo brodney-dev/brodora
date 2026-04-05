@@ -16,11 +16,24 @@ export default defineConfig({
 			},
 		},
 	},
-	preload: {},
+	preload: {
+		build: {
+			// Bundle deps into the preload script. ESM preload cannot resolve bare
+			// `fp-ts/Option` (directory imports) from node_modules when left external.
+			externalizeDeps: false,
+			rollupOptions: {
+				output: {
+					// Top-level `await` in preload requires ESM output (not CJS).
+					format: "es",
+				},
+			},
+		},
+	},
 	renderer: {
 		resolve: {
 			alias: {
 				"@renderer": resolve("src/renderer/src"),
+				"@shared": resolve("src/shared"),
 			},
 		},
 		plugins: [react()],

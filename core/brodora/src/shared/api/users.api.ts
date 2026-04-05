@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BrodoraApiHandler } from "./_common/api";
+import { sessionUserStateSchema } from "./session-user";
 
 export const userRowSchema = z.object({
 	id: z.number(),
@@ -37,12 +38,7 @@ export const UsersApi = {
 	getLoggedIn: new BrodoraApiHandler({
 		key: "users:getLoggedIn",
 		inputValidator: z.void(),
-		outputValidator: z
-			.object({
-				id: z.number(),
-				name: z.string(),
-			})
-			.nullable(),
+		outputValidator: sessionUserStateSchema,
 	}),
 	/** Clears all `loggedIn` flags, then sets the given active user as logged in. */
 	setLoggedIn: new BrodoraApiHandler({

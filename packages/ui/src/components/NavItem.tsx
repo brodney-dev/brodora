@@ -62,9 +62,9 @@ export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
 					}
 				: active
 					? {
-							borderColor: colors.primary.border,
-							backgroundColor: colors.primary.container,
-							color: colors.secondary.onContainer,
+							borderColor: colors.neutral.border,
+							backgroundColor: colors.neutral.main,
+							color: colors.neutral.onMain,
 							fontWeight: 600,
 						}
 					: {

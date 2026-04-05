@@ -1,17 +1,17 @@
-import type * as React from "react";
+import type { ReactNode } from "react";
 import { LockScreen } from "../lockscreen";
-import { useUserStore } from "./userStore";
+import { useOptionalUser } from "./useUser";
 
 export type RequiresUserProps = {
-	children: React.ReactNode;
+	children: ReactNode;
 };
 
 /**
- * If no session user is set, shows the lock screen. After selection, records access
- * for that user and renders children (routed app).
+ * Renders the lock screen when the server reports no logged-in user; otherwise
+ * the app. Session is driven by preload `__initialState` and `api.ipc` events.
  */
 export function RequiresUser({ children }: RequiresUserProps) {
-	const sessionUser = useUserStore((s) => s.sessionUser);
+	const sessionUser = useOptionalUser();
 
 	if (sessionUser === null) {
 		return <LockScreen />;

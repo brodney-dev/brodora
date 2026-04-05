@@ -1,10 +1,21 @@
 import "reflect-metadata";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { NestFactory } from "@nestjs/core";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import icon from "../../resources/icon.png?asset";
 import { AppModule } from "./modules/app.module";
+
+/** ESM preload build emits `index.mjs`; dev / legacy CJS uses `index.js`. */
+function resolvePreloadPath(): string {
+	const dir = join(__dirname, "../preload");
+	const mjs = join(dir, "index.mjs");
+	if (existsSync(mjs)) {
+		return mjs;
+	}
+	return join(dir, "index.js");
+}
 
 function createWindow(): void {
 	// Create the browser window.
@@ -15,7 +26,7 @@ function createWindow(): void {
 		autoHideMenuBar: true,
 		...(process.platform === "linux" ? { icon } : {}),
 		webPreferences: {
-			preload: join(__dirname, "../preload/index.js"),
+			preload: resolvePreloadPath(),
 			sandbox: false,
 		},
 	});

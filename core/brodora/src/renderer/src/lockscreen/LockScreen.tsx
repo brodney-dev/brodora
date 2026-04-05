@@ -8,7 +8,6 @@ import {
 	Typography,
 	useTheme,
 } from "@brodora/ui";
-import { useUserStore } from "@renderer/user";
 import * as O from "fp-ts/Option";
 import * as React from "react";
 import { HyperspaceCanvas } from "./HyperspaceCanvas";
@@ -30,8 +29,6 @@ function sortUsersForLockScreen<
  * Session picker: choose an existing local user or create one, then continue into the app.
  */
 export function LockScreen() {
-	const setSessionUser = useUserStore((s) => s.setSessionUser);
-
 	const { colors } = useTheme();
 	const [users, setUsers] = React.useState<
 		Array<{
@@ -51,10 +48,13 @@ export function LockScreen() {
 
 	const handleSelectUser = React.useCallback(
 		async (user: { id: number; name: string }): Promise<void> => {
-			await window.api.users.setLoggedIn({ id: user.id });
-			setSessionUser({ id: user.id, name: user.name });
+			const ok = await window.api.users.setLoggedIn({ id: user.id });
+			if (O.isNone(ok) || !ok.value) {
+				return;
+			}
+			await window.api.users.recordAccess({ id: user.id });
 		},
-		[setSessionUser],
+		[],
 	);
 
 	const loadUsers = React.useCallback(async () => {
@@ -66,20 +66,12 @@ export function LockScreen() {
 				return;
 			}
 			const active = listed.value.filter((u) => u.deletedAt === null);
-			const loggedIn = active.find((u) => u.loggedIn);
-			if (loggedIn) {
-				handleSelectUser({
-					id: loggedIn.id,
-					name: loggedIn.name,
-				});
-				return;
-			}
 			setUsers(sortUsersForLockScreen(active));
 			setLoadState("ready");
 		} catch {
 			setLoadState("error");
 		}
-	}, [handleSelectUser]);
+	}, []);
 
 	React.useEffect(() => {
 		void loadUsers();
@@ -101,7 +93,7 @@ export function LockScreen() {
 				return;
 			}
 
-			handleSelectUser({
+			void handleSelectUser({
 				id: created.value.id,
 				name: created.value.name,
 			});
