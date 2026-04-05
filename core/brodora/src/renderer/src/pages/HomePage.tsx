@@ -1,7 +1,31 @@
-import { Card, CardBody, Stack, Typography } from "@brodora/ui";
+import { Button, Card, CardBody, Stack, Typography } from "@brodora/ui";
+import * as O from "fp-ts/Option";
+import * as React from "react";
 import Versions from "../components/Versions";
 
 export function HomePage() {
+	const [launchMessage, setLaunchMessage] = React.useState<string | null>(null);
+	const [launching, setLaunching] = React.useState(false);
+
+	async function handleLaunchTestApp(): Promise<void> {
+		setLaunchMessage(null);
+		setLaunching(true);
+		try {
+			const result = await window.api.launcher.launchTestApp(undefined);
+			if (O.isNone(result)) {
+				setLaunchMessage("Could not start test app (IPC error).");
+				return;
+			}
+			setLaunchMessage(
+				result.value
+					? "Test app process started."
+					: "Failed to start test app.",
+			);
+		} finally {
+			setLaunching(false);
+		}
+	}
+
 	return (
 		<Stack spacing={3} sx={{ p: 4, flex: 1 }}>
 			<div>
@@ -19,10 +43,38 @@ export function HomePage() {
 			</div>
 			<Card sx={{ maxWidth: "36rem" }}>
 				<CardBody>
-					<Typography variant="body-sm" as="p" style={{ margin: 0 }}>
-						Build screens here with components from{" "}
-						<code style={{ fontSize: "0.9em" }}>@brodora/ui</code>.
-					</Typography>
+					<Stack spacing={2}>
+						<Typography variant="body-sm" as="p" style={{ margin: 0 }}>
+							Build screens here with components from{" "}
+							<code style={{ fontSize: "0.9em" }}>@brodora/ui</code>.
+						</Typography>
+						<div>
+							<Button
+								type="button"
+								color="secondary"
+								disabled={launching}
+								onClick={() => void handleLaunchTestApp()}
+							>
+								{launching ? "Starting…" : "Launch test app"}
+							</Button>
+							{launchMessage ? (
+								<Typography
+									variant="body-sm"
+									as="p"
+									style={{ margin: "0.5rem 0 0" }}
+									sx={{
+										color: (t) =>
+											launchMessage.startsWith("Could not") ||
+											launchMessage.startsWith("Failed")
+												? t.colors.error.main
+												: t.colors.secondary.onMain,
+									}}
+								>
+									{launchMessage}
+								</Typography>
+							) : null}
+						</div>
+					</Stack>
 				</CardBody>
 			</Card>
 			<div style={{ marginTop: "auto" }}>

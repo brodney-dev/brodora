@@ -1,7 +1,6 @@
 import { ipcRenderer } from "electron";
 import * as O from "fp-ts/Option";
 import type { z } from "zod";
-import { BrodoraApi } from "../shared/api";
 import type { BrodoraApiHandler } from "../shared/api/_common/api";
 
 export const setupBrodoraApiHanlder = <
@@ -43,9 +42,4 @@ export const setupBrodoraApi = <
 			input: z.infer<T[K]["inputValidator"]>,
 		) => Promise<O.Option<z.infer<T[K]["outputValidator"]>>>;
 	};
-};
-
-export const CallableBrodoraApi = {
-	users: setupBrodoraApi(BrodoraApi.users),
-	launcher: setupBrodoraApi(BrodoraApi.launcher),
 };
