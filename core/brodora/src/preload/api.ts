@@ -47,5 +47,6 @@ export const setupBrodoraApi = <
 
 export const CallableBrodoraApi = {
 	users: setupBrodoraApi(BrodoraApi.users),
+	apps: setupBrodoraApi(BrodoraApi.apps),
 	launcher: setupBrodoraApi(BrodoraApi.launcher),
 };

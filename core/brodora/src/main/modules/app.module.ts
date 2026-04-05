@@ -1,5 +1,6 @@
 import { type DynamicModule, Module } from "@nestjs/common";
 import { AppLauncherModule } from "./app-launcher/app-launcher.module";
+import { AppsModule } from "./apps/apps.module";
 import { DatabaseModule } from "./database/database.module";
 import { UsersModule } from "./users/users.module";
 
@@ -11,6 +12,7 @@ export class AppModule {
 			imports: [
 				DatabaseModule.forRoot(userDataDir),
 				UsersModule,
+				AppsModule,
 				AppLauncherModule,
 			],
 		};

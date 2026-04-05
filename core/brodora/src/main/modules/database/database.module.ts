@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { type DynamicModule, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { app } from "electron";
+import { LibraryApp } from "../apps/library-app.entity";
 import { User } from "../users/user.entity";
 
 @Module({})
@@ -22,7 +23,7 @@ export class DatabaseModule {
 						return {
 							type: "better-sqlite3" as const,
 							database,
-							entities: [User],
+							entities: [User, LibraryApp],
 							migrations: isDev
 								? ["src/main/migrations/*.ts"]
 								: ["dist/main/migrations/*.js"],

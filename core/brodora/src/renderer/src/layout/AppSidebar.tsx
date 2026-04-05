@@ -1,15 +1,8 @@
 import { ChevronDown } from "@brodora/icons";
-import {
-	Box,
-	Divider,
-	NavItem,
-	Stack,
-	TextField,
-	Typography,
-	useTheme,
-} from "@brodora/ui";
+import { Box, Divider, NavItem, Stack, useTheme } from "@brodora/ui";
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLibraryApps } from "../library/useLibraryApps";
 import { ProfileMenu } from "./ProfileMenu";
 
 /** Hardcoded installed apps until a real catalog exists. */
@@ -30,9 +23,9 @@ export function AppSidebar() {
 	const { colors } = useTheme();
 	const location = useLocation();
 	const navigate = useNavigate();
-	const [query, setQuery] = React.useState("");
+	const [query] = React.useState("");
 
-	const filteredApps = React.useMemo(() => {
+	const filteredInstalled = React.useMemo(() => {
 		const q = query.trim().toLowerCase();
 		if (!q) {
 			return LIBRARY_APPS;
@@ -40,7 +33,21 @@ export function AppSidebar() {
 		return LIBRARY_APPS.filter((app) => app.label.toLowerCase().includes(q));
 	}, [query]);
 
+	const catalogApps = useLibraryApps();
+	const filteredCatalogApps = React.useMemo(() => {
+		const q = query.trim().toLowerCase();
+		if (!q) {
+			return catalogApps;
+		}
+		return catalogApps.filter(
+			(a) =>
+				a.name.toLowerCase().includes(q) || a.appId.toLowerCase().includes(q),
+		);
+	}, [catalogApps, query]);
+
 	const [installedAppsOpen, setInstalledAppsOpen] = React.useState(true);
+	const [catalogAppsOpen, setCatalogAppsOpen] = React.useState(false);
+
 	return (
 		<Stack
 			sx={{
@@ -53,11 +60,9 @@ export function AppSidebar() {
 				backgroundColor: colors.background.main,
 			}}
 		>
-			<Stack>
-				<Box sx={{ width: "100%", flexShrink: 0, mb: 0.5 }}>
-					<ProfileMenu fullWidth />
-				</Box>
-			</Stack>
+			<Box sx={{ width: "100%", flexShrink: 0, mb: 0.5 }}>
+				<ProfileMenu fullWidth />
+			</Box>
 			<Divider sx={{ width: "100%", flexShrink: 0, my: 0.25 }} />
 
 			<NavItem
@@ -74,11 +79,11 @@ export function AppSidebar() {
 				}
 				onClick={() => setInstalledAppsOpen(!installedAppsOpen)}
 			>
-				{`(1) INSTALLED`}
+				{`(${LIBRARY_APPS.length}) INSTALLED`}
 			</NavItem>
-			{installedAppsOpen && (
-				<Stack spacing={0} sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
-					{filteredApps.map((app) => {
+			{installedAppsOpen ? (
+				<Stack>
+					{filteredInstalled.map((app) => {
 						const active = location.pathname === app.to;
 						return (
 							<NavItem
@@ -89,6 +94,44 @@ export function AppSidebar() {
 								onClick={() => navigate(app.to)}
 							>
 								{app.label}
+							</NavItem>
+						);
+					})}
+				</Stack>
+			) : null}
+
+			<Divider sx={{ width: "100%", flexShrink: 0, my: 0.25 }} />
+
+			<NavItem
+				fullWidth
+				sx={sidebarNavSx}
+				endNode={
+					<ChevronDown
+						size={14}
+						style={{
+							transform: catalogAppsOpen ? "rotate(180deg)" : "rotate(0deg)",
+							transition: "transform 0.2s ease-in-out",
+						}}
+					/>
+				}
+				onClick={() => setCatalogAppsOpen(!catalogAppsOpen)}
+			>
+				{`(${catalogApps.length}) LIBRARY`}
+			</NavItem>
+			{catalogAppsOpen && (
+				<Stack>
+					{filteredCatalogApps.map((app) => {
+						const to = `/library/catalog/${app.id}`;
+						const active = location.pathname === to;
+						return (
+							<NavItem
+								key={`catalog-${app.id}`}
+								active={active}
+								fullWidth
+								sx={sidebarNavSx}
+								onClick={() => navigate(to)}
+							>
+								{app.name}
 							</NavItem>
 						);
 					})}
