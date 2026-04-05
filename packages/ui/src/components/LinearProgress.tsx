@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
@@ -8,8 +9,8 @@ export interface LinearProgressProps
 	value?: number;
 	/** Height of the bar in px. */
 	height?: number;
-	/** Color variant. */
-	variant?: "primary" | "success" | "error";
+	/** Semantic palette for the progress fill. */
+	color?: ThemeColorName;
 	sx?: SxProps;
 	style?: React.CSSProperties;
 }
@@ -18,7 +19,15 @@ export const LinearProgress = React.forwardRef<
 	HTMLDivElement,
 	LinearProgressProps
 >(function LinearProgress(
-	{ value, height = 6, variant = "primary", sx, style, className, ...props },
+	{
+		value,
+		height = 6,
+		color: colorProp = "primary",
+		sx,
+		style,
+		className,
+		...props
+	},
 	ref,
 ) {
 	const { colors, shape } = useTheme();
@@ -26,13 +35,8 @@ export const LinearProgress = React.forwardRef<
 
 	const clamped = value == null ? undefined : Math.max(0, Math.min(100, value));
 
-	const trackColor = colors.secondary[200];
-	const barColor =
-		variant === "success"
-			? colors.success[600]
-			: variant === "error"
-				? colors.error[600]
-				: colors.primary[600];
+	const trackColor = colors.secondary.main;
+	const barColor = colors[colorProp].main;
 
 	const rootStyle: React.CSSProperties = {
 		position: "relative",

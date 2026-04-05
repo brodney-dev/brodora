@@ -20,11 +20,11 @@ type TextTone = "foreground" | "muted" | "subtle";
 function toneColor(colors: ThemeColors, tone: TextTone): string {
 	switch (tone) {
 		case "foreground":
-			return colors.secondary[900];
+			return colors.secondary.onContainer;
 		case "muted":
-			return colors.secondary[600];
+			return colors.secondary.onMain;
 		case "subtle":
-			return colors.secondary[500];
+			return colors.secondary.onMain;
 	}
 }
 

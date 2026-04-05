@@ -1,19 +1,8 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
-import { useTheme } from "../theme";
+import { hexToRgba, useTheme } from "../theme";
 
 const BACKDROP_STYLE_ID = "brodora-dialog-backdrop";
-
-function hexToRgba(hex: string, alpha: number): string {
-	const normalized = hex.replace("#", "");
-	if (normalized.length !== 6) {
-		return `rgba(0, 0, 0, ${alpha})`;
-	}
-	const r = Number.parseInt(normalized.slice(0, 2), 16);
-	const g = Number.parseInt(normalized.slice(2, 4), 16);
-	const b = Number.parseInt(normalized.slice(4, 6), 16);
-	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
 
 function syncDialogBackdropCss(backdropColor: string) {
 	if (typeof document === "undefined") return;
@@ -52,7 +41,7 @@ export function Dialog({
 	const { colors, shape } = useTheme();
 	const sxStyles = useSxStyles(sx);
 	const dialogRef = React.useRef<HTMLDialogElement>(null);
-	const backdropColor = hexToRgba(colors.secondary[900], 0.45);
+	const backdropColor = hexToRgba(colors.secondary.onContainer, 0.45);
 
 	React.useLayoutEffect(() => {
 		syncDialogBackdropCss(backdropColor);
@@ -83,16 +72,16 @@ export function Dialog({
 		maxWidth: "min(32rem, calc(100vw - 2rem))",
 		width: "100%",
 		borderRadius: `${shape.borderRadius}px`,
-		backgroundColor: colors.secondary[50],
-		color: colors.secondary[900],
-		boxShadow: `0 25px 50px -12px ${hexToRgba(colors.secondary[900], 0.25)}`,
+		backgroundColor: colors.background.container,
+		color: colors.secondary.onContainer,
+		boxShadow: `0 25px 50px -12px ${hexToRgba(colors.secondary.onContainer, 0.25)}`,
 		...sxStyles,
 		...style,
 	};
 
 	const headerStyle: React.CSSProperties = {
 		padding: "1rem 1.25rem",
-		borderBottom: `1px solid ${colors.secondary[200]}`,
+		borderBottom: `1px solid ${colors.neutral.border}`,
 		fontSize: "1.125rem",
 		fontWeight: 600,
 	};
@@ -103,7 +92,7 @@ export function Dialog({
 
 	const footerStyle: React.CSSProperties = {
 		padding: "1rem 1.25rem",
-		borderTop: `1px solid ${colors.secondary[200]}`,
+		borderTop: `1px solid ${colors.neutral.border}`,
 		display: "flex",
 		justifyContent: "flex-end",
 		gap: "0.5rem",

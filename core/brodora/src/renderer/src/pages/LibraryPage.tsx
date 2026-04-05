@@ -10,7 +10,7 @@ export function LibraryPage() {
 				variant="body-sm"
 				as="p"
 				style={{ margin: 0 }}
-				sx={{ color: (theme) => theme.colors.secondary[600] }}
+				sx={{ color: (theme) => theme.colors.secondary.onMain }}
 			>
 				Your library content will live here.
 			</Typography>

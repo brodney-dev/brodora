@@ -1,23 +1,23 @@
-export type {
-	ColorScale,
-	ColorShade,
-	SemanticColorName,
-	Theme,
-	ThemeAction,
-	ThemeColors,
-	ThemeShape,
-} from "./types";
-export { createSpacing, defaultSpacingUnit } from "./spacing";
+export { hexToRgba } from "./colorUtils";
+export { COLOR_ROLES, SEMANTIC_COLOR_NAMES } from "./constants";
+export { mergeThemeAction, mergeThemeColors } from "./cssVars";
 export {
 	defaultTheme,
 	defaultThemeAction,
 	defaultThemeColors,
 } from "./defaultColors";
-export { COLOR_SHADES, SEMANTIC_COLOR_NAMES } from "./constants";
-export { mergeThemeAction, mergeThemeColors } from "./cssVars";
+export { createSpacing, defaultSpacingUnit } from "./spacing";
+export type { ThemeProviderProps } from "./ThemeProvider";
 export {
 	ThemeProvider,
 	useTheme,
 	useThemeColors,
 } from "./ThemeProvider";
-export type { ThemeProviderProps } from "./ThemeProvider";
+export type {
+	SemanticColorName,
+	SemanticColorTokens,
+	Theme,
+	ThemeAction,
+	ThemeColors,
+	ThemeShape,
+} from "./types";

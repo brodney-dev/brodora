@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
-import { useTheme } from "../theme";
+import { hexToRgba, useTheme } from "../theme";
 
 export type AutocompleteOption =
 	| string
@@ -195,7 +195,7 @@ export const Autocomplete = React.forwardRef<HTMLDivElement, AutocompleteProps>(
 		const labelStyle: React.CSSProperties = {
 			fontSize: "0.875rem",
 			fontWeight: 500,
-			color: colors.secondary[800],
+			color: colors.secondary.onContainer,
 		};
 
 		const inputStyle: React.CSSProperties = {
@@ -219,24 +219,24 @@ export const Autocomplete = React.forwardRef<HTMLDivElement, AutocompleteProps>(
 					}
 				: error
 					? {
-							borderColor: colors.error[500],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.error.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}
 					: {
-							borderColor: colors.secondary[300],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.secondary.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}),
 			...(focused && !isDisabled
-				? { boxShadow: `0 0 0 2px ${colors.primary[200]}` }
+				? { boxShadow: `0 0 0 2px ${colors.primary.container}` }
 				: {}),
 		};
 
 		const helperStyle: React.CSSProperties = {
 			fontSize: "0.75rem",
 			lineHeight: 1.4,
-			color: error ? colors.error[600] : colors.secondary[600],
+			color: error ? colors.error.main : colors.secondary.onMain,
 		};
 
 		const listStyle: React.CSSProperties = {
@@ -250,10 +250,10 @@ export const Autocomplete = React.forwardRef<HTMLDivElement, AutocompleteProps>(
 			margin: 0,
 			padding: "0.35rem 0",
 			listStyle: "none",
-			backgroundColor: "#ffffff",
-			border: `1px solid ${colors.secondary[200]}`,
+			backgroundColor: colors.background.container,
+			border: `1px solid ${colors.neutral.border}`,
 			borderRadius: `${shape.borderRadius}px`,
-			boxShadow: `0 12px 28px -12px ${colors.secondary[400]}`,
+			boxShadow: `0 12px 28px -12px ${hexToRgba(colors.secondary.onContainer, 0.14)}`,
 		};
 
 		const selectOption = (opt: { value: string; label: React.ReactNode }) => {
@@ -329,7 +329,7 @@ export const Autocomplete = React.forwardRef<HTMLDivElement, AutocompleteProps>(
 									style={{
 										padding: "0.5rem 0.75rem",
 										fontSize: "0.875rem",
-										color: colors.secondary[500],
+										color: colors.secondary.onMain,
 									}}
 								>
 									{noOptionsText}
@@ -355,9 +355,9 @@ export const Autocomplete = React.forwardRef<HTMLDivElement, AutocompleteProps>(
 												fontSize: "0.875rem",
 												cursor: "pointer",
 												backgroundColor: active
-													? colors.primary[50]
+													? colors.primary.container
 													: "transparent",
-												color: colors.secondary[900],
+												color: colors.secondary.onContainer,
 											}}
 										>
 											{opt.label}

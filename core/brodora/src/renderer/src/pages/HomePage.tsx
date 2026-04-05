@@ -12,7 +12,7 @@ export function HomePage() {
 					variant="body-sm"
 					as="p"
 					style={{ margin: 0 }}
-					sx={{ color: (theme) => theme.colors.secondary[600] }}
+					sx={{ color: (theme) => theme.colors.secondary.onMain }}
 				>
 					Use the sidebar to move around the app. This is the main content area.
 				</Typography>

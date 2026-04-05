@@ -36,7 +36,7 @@ export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
 			width: w,
 			height: h,
 			borderRadius: radius,
-			background: `linear-gradient(90deg, ${colors.secondary[200]} 0%, ${colors.secondary[100]} 45%, ${colors.secondary[200]} 90%)`,
+			background: `linear-gradient(90deg, ${colors.secondary.main} 0%, ${colors.background.main} 45%, ${colors.secondary.main} 90%)`,
 			backgroundSize: "200% 100%",
 			animation: "brodora-skeleton 1.25s ease-in-out infinite",
 			...sxStyles,

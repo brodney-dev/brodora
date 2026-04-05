@@ -92,10 +92,10 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 						opacity: action.disabledOpacity ?? 0.5,
 					}
 				: on
-					? { backgroundColor: colors.primary[600] }
+					? { backgroundColor: colors.primary.main }
 					: {
-							backgroundColor: colors.secondary[200],
-							border: `1px solid ${colors.secondary[300]}`,
+							backgroundColor: colors.secondary.main,
+							border: `1px solid ${colors.secondary.border}`,
 						}),
 		};
 

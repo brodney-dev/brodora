@@ -41,7 +41,7 @@ export const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
 		const sxStyles = useSxStyles(sx);
 		const rootStyle: React.CSSProperties = {
 			padding: "0.5rem 0",
-			borderBottom: `1px solid ${colors.secondary[100]}`,
+			borderBottom: `1px solid ${colors.neutral.border}`,
 			...sxStyles,
 			...style,
 		};
@@ -76,7 +76,7 @@ export function ListDivider({
 				listStyle: "none",
 				height: 1,
 				margin: "0.5rem 0",
-				backgroundColor: colors.secondary[200],
+				backgroundColor: colors.secondary.main,
 				border: "none",
 				padding: 0,
 				...sxStyles,

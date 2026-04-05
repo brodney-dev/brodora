@@ -1,18 +1,16 @@
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
-export type BadgeVariant =
-	| "default"
-	| "primary"
-	| "success"
-	| "warning"
-	| "error"
-	| "outline";
+/** Filled soft chip vs transparent with border. */
+export type BadgeAppearance = "soft" | "outline";
 
 export interface BadgeProps
 	extends Omit<React.HTMLAttributes<HTMLSpanElement>, "style"> {
-	variant?: BadgeVariant;
+	/** Semantic palette for fill, text, and border. */
+	color?: ThemeColorName;
+	appearance?: BadgeAppearance;
 	size?: "sm" | "md";
 	sx?: SxProps;
 	style?: React.CSSProperties;
@@ -21,7 +19,8 @@ export interface BadgeProps
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 	function Badge(
 		{
-			variant = "default",
+			color: colorProp = "neutral",
+			appearance = "soft",
 			size = "sm",
 			sx,
 			style,
@@ -33,50 +32,23 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 	) {
 		const { colors, shape } = useTheme();
 		const sxStyles = useSxStyles(sx);
+		const palette = colors[colorProp];
+
+		const paletteStyle =
+			appearance === "outline"
+				? {
+						bg: "transparent" as const,
+						fg: palette.onContainer,
+						border: `1px solid ${palette.border}`,
+					}
+				: {
+						bg: palette.container,
+						fg: palette.onContainer,
+						border: `1px solid ${palette.border}`,
+					};
 
 		const padding = size === "sm" ? "0.125rem 0.5rem" : "0.25rem 0.625rem";
 		const fontSize = size === "sm" ? "0.75rem" : "0.8125rem";
-
-		const palette = (() => {
-			switch (variant) {
-				case "primary":
-					return {
-						bg: colors.primary[100],
-						fg: colors.primary[800],
-						border: `1px solid ${colors.primary[200]}`,
-					};
-				case "success":
-					return {
-						bg: colors.success[100],
-						fg: colors.success[800],
-						border: `1px solid ${colors.success[200]}`,
-					};
-				case "warning":
-					return {
-						bg: colors.warning[100],
-						fg: colors.warning[800],
-						border: `1px solid ${colors.warning[200]}`,
-					};
-				case "error":
-					return {
-						bg: colors.error[100],
-						fg: colors.error[800],
-						border: `1px solid ${colors.error[200]}`,
-					};
-				case "outline":
-					return {
-						bg: "transparent",
-						fg: colors.secondary[700],
-						border: `1px solid ${colors.secondary[300]}`,
-					};
-				default:
-					return {
-						bg: colors.secondary[100],
-						fg: colors.secondary[800],
-						border: `1px solid ${colors.secondary[200]}`,
-					};
-			}
-		})();
 
 		const rootStyle: React.CSSProperties = {
 			display: "inline-flex",
@@ -88,9 +60,9 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 			fontWeight: 600,
 			lineHeight: 1.25,
 			borderRadius: `${shape.borderRadius}px`,
-			backgroundColor: palette.bg,
-			color: palette.fg,
-			border: palette.border,
+			backgroundColor: paletteStyle.bg,
+			color: paletteStyle.fg,
+			border: paletteStyle.border,
 			whiteSpace: "nowrap",
 			maxWidth: "100%",
 			...sxStyles,

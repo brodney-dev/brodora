@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
-import { useTheme } from "../theme";
+import { hexToRgba, useTheme } from "../theme";
 
 export type ToastVariant = "default" | "success" | "error";
 
@@ -189,20 +189,20 @@ function ToastView({ toast: t }: ToastViewProps) {
 	const palette =
 		t.variant === "success"
 			? {
-					border: colors.success[200],
-					bg: colors.success[50],
-					fg: colors.success[900],
+					border: colors.success.border,
+					bg: colors.success.container,
+					fg: colors.success.onContainer,
 				}
 			: t.variant === "error"
 				? {
-						border: colors.error[200],
-						bg: colors.error[50],
-						fg: colors.error[900],
+						border: colors.error.border,
+						bg: colors.error.container,
+						fg: colors.error.onContainer,
 					}
 				: {
-						border: colors.secondary[200],
-						bg: "#ffffff",
-						fg: colors.secondary[900],
+						border: colors.neutral.border,
+						bg: colors.background.container,
+						fg: colors.secondary.onContainer,
 					};
 
 	const schedule = React.useCallback(() => {
@@ -233,7 +233,7 @@ function ToastView({ toast: t }: ToastViewProps) {
 		border: `1px solid ${palette.border}`,
 		background: palette.bg,
 		color: palette.fg,
-		boxShadow: `0 10px 30px -12px ${colors.secondary[400]}`,
+		boxShadow: `0 10px 30px -12px ${hexToRgba(colors.secondary.onContainer, 0.12)}`,
 		transition: "transform 0.15s ease, opacity 0.15s ease",
 	};
 

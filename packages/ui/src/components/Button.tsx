@@ -1,10 +1,13 @@
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
 export interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode;
+	/** Semantic palette; fills with `main`, text `onMain`, outline `border`. */
+	color?: ThemeColorName;
 	startNode?: React.ReactNode;
 	endNode?: React.ReactNode;
 	sx?: SxProps;
@@ -12,12 +15,22 @@ export interface ButtonProps
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	function Button(
-		{ children, startNode, endNode, disabled, style, sx, ...props },
+		{
+			children,
+			color: colorProp = "primary",
+			startNode,
+			endNode,
+			disabled,
+			style,
+			sx,
+			...props
+		},
 		ref,
 	) {
 		const { colors, action } = useTheme();
 		const sxStyles = useSxStyles(sx);
 		const isDisabled = Boolean(disabled);
+		const palette = colors[colorProp];
 
 		return (
 			<button
@@ -40,9 +53,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 								cursor: "not-allowed",
 							}
 						: {
-								border: `1px solid ${colors.primary[700]}`,
-								background: colors.primary[600],
-								color: "#ffffff",
+								border: `1px solid ${palette.border}`,
+								background: palette.main,
+								color: palette.onMain,
 								cursor: "pointer",
 							}),
 					...sxStyles,

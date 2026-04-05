@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
-import { useTheme } from "../theme";
+import { hexToRgba, useTheme } from "../theme";
 
 function mergeRefs<T>(
 	...refs: Array<React.Ref<T> | undefined>
@@ -162,10 +162,10 @@ export const PopoverContent = React.forwardRef<
 		maxWidth: "min(24rem, calc(100vw - 2rem))",
 		padding: "0.75rem 0.875rem",
 		borderRadius: `${shape.borderRadius}px`,
-		border: `1px solid ${colors.secondary[200]}`,
-		background: "#ffffff",
-		color: colors.secondary[900],
-		boxShadow: `0 18px 45px -20px ${colors.secondary[400]}`,
+		border: `1px solid ${colors.neutral.border}`,
+		background: colors.background.container,
+		color: colors.secondary.onContainer,
+		boxShadow: `0 18px 45px -20px ${hexToRgba(colors.secondary.onContainer, 0.14)}`,
 		...(() => {
 			const isTop = placement.startsWith("top");
 			const isEnd = placement.endsWith("end");

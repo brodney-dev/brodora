@@ -1,10 +1,13 @@
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
 export interface IconButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	size?: "sm" | "md" | "lg";
+	/** Semantic palette: icon uses `onContainer`, hover background uses `container`. */
+	color?: ThemeColorName;
 	sx?: SxProps;
 }
 
@@ -16,7 +19,16 @@ const sizePx: Record<NonNullable<IconButtonProps["size"]>, number> = {
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
 	function IconButton(
-		{ size = "md", disabled, children, style, sx, type = "button", ...props },
+		{
+			size = "md",
+			color: colorProp = "secondary",
+			disabled,
+			children,
+			style,
+			sx,
+			type = "button",
+			...props
+		},
 		ref,
 	) {
 		const { colors, action } = useTheme();
@@ -24,6 +36,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
 		const isDisabled = Boolean(disabled);
 		const dim = sizePx[size];
 		const [hover, setHover] = React.useState(false);
+		const palette = colors[colorProp];
 
 		return (
 			<button
@@ -56,8 +69,8 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
 								cursor: "not-allowed",
 							}
 						: {
-								background: hover ? colors.secondary[100] : "transparent",
-								color: colors.secondary[700],
+								background: hover ? palette.container : "transparent",
+								color: palette.onContainer,
 								cursor: "pointer",
 							}),
 					...sxStyles,

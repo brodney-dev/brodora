@@ -16,32 +16,32 @@ function variantStyles(
 	switch (variant) {
 		case "success":
 			return {
-				border: colors.success[200],
-				background: colors.success[50],
-				titleColor: colors.success[900],
-				bodyColor: colors.success[800],
+				border: colors.success.border,
+				background: colors.success.container,
+				titleColor: colors.success.onContainer,
+				bodyColor: colors.success.onContainer,
 			};
 		case "warning":
 			return {
-				border: colors.warning[200],
-				background: colors.warning[50],
-				titleColor: colors.warning[900],
-				bodyColor: colors.warning[800],
+				border: colors.warning.border,
+				background: colors.warning.container,
+				titleColor: colors.warning.onContainer,
+				bodyColor: colors.warning.onContainer,
 			};
 		case "error":
 			return {
-				border: colors.error[200],
-				background: colors.error[50],
-				titleColor: colors.error[900],
-				bodyColor: colors.error[800],
+				border: colors.error.border,
+				background: colors.error.container,
+				titleColor: colors.error.onContainer,
+				bodyColor: colors.error.onContainer,
 			};
 		case "info":
 		default:
 			return {
-				border: colors.info[200],
-				background: colors.info[50],
-				titleColor: colors.info[900],
-				bodyColor: colors.info[800],
+				border: colors.info.border,
+				background: colors.info.container,
+				titleColor: colors.info.onContainer,
+				bodyColor: colors.info.onContainer,
 			};
 	}
 }

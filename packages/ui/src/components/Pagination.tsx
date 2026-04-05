@@ -63,9 +63,9 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 			height: "2.25rem",
 			padding: "0 0.5rem",
 			borderRadius: `${shape.borderRadius}px`,
-			border: `1px solid ${colors.secondary[300]}`,
-			background: "#ffffff",
-			color: colors.secondary[800],
+			border: `1px solid ${colors.neutral.border}`,
+			background: colors.background.container,
+			color: colors.secondary.onContainer,
 			fontSize: "0.875rem",
 			cursor: "pointer",
 		};
@@ -90,9 +90,9 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 						...btnBase,
 						...(active
 							? {
-									background: colors.primary[600],
-									borderColor: colors.primary[700],
-									color: "#ffffff",
+									background: colors.primary.main,
+									borderColor: colors.primary.border,
+									color: colors.primary.onMain,
 									fontWeight: 600,
 								}
 							: {}),
@@ -121,7 +121,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 					it === "ellipsis" ? (
 						<span
 							key={`e-${i}`}
-							style={{ padding: "0 0.25rem", color: colors.secondary[500] }}
+							style={{ padding: "0 0.25rem", color: colors.secondary.onMain }}
 						>
 							…
 						</span>

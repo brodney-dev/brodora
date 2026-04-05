@@ -1,7 +1,7 @@
 "use client";
 
 import { GitBranch } from "@brodora/icons";
-import { Box, Link, Stack, Typography, useTheme } from "@brodora/ui";
+import { Box, hexToRgba, Link, Stack, Typography, useTheme } from "@brodora/ui";
 import type { CSSProperties, ReactNode } from "react";
 
 const REPO = "https://github.com/brodney-dev/brodora";
@@ -15,9 +15,9 @@ function GitHubButtonLink({ children }: { children: ReactNode }) {
 		gap: "0.5rem",
 		padding: "0.625rem 1.25rem",
 		borderRadius: shape.borderRadius,
-		border: `1px solid ${colors.primary[700]}`,
-		background: colors.primary[600],
-		color: "#ffffff",
+		border: `1px solid ${colors.primary.border}`,
+		background: colors.primary.main,
+		color: colors.primary.onMain,
 		fontSize: "0.9375rem",
 		fontWeight: 600,
 		textDecoration: "none",
@@ -33,12 +33,12 @@ function GitHubButtonLink({ children }: { children: ReactNode }) {
 			rel="noopener noreferrer"
 			style={base}
 			onMouseEnter={(e) => {
-				e.currentTarget.style.background = colors.primary[700];
-				e.currentTarget.style.borderColor = colors.primary[800];
+				e.currentTarget.style.background = colors.primary.onContainer;
+				e.currentTarget.style.borderColor = colors.primary.border;
 			}}
 			onMouseLeave={(e) => {
-				e.currentTarget.style.background = colors.primary[600];
-				e.currentTarget.style.borderColor = colors.primary[700];
+				e.currentTarget.style.background = colors.primary.main;
+				e.currentTarget.style.borderColor = colors.primary.border;
 			}}
 		>
 			<GitBranch size={18} strokeWidth={2} />
@@ -57,7 +57,7 @@ export function HomepageContainer() {
 				minHeight: "100vh",
 				display: "flex",
 				flexDirection: "column",
-				background: `linear-gradient(165deg, ${colors.primary[50]} 0%, ${colors.secondary[50]} 42%, ${colors.secondary[100]} 100%)`,
+				background: `linear-gradient(165deg, ${colors.primary.container} 0%, ${colors.secondary.container} 42%, ${colors.background.main} 100%)`,
 			}}
 		>
 			<Box
@@ -66,7 +66,7 @@ export function HomepageContainer() {
 					position: "sticky",
 					top: 0,
 					zIndex: 10,
-					borderBottom: `1px solid ${colors.secondary[200]}`,
+					borderBottom: `1px solid ${colors.neutral.border}`,
 					background: "rgba(248, 250, 252, 0.85)",
 					backdropFilter: "blur(10px)",
 				}}
@@ -86,7 +86,7 @@ export function HomepageContainer() {
 						href="/"
 						style={{
 							textDecoration: "none",
-							color: colors.secondary[900],
+							color: colors.secondary.onContainer,
 						}}
 					>
 						<Typography variant="title" as="span" sx={{ fontSize: "1.35rem" }}>
@@ -100,7 +100,7 @@ export function HomepageContainer() {
 						sx={{
 							fontSize: "0.875rem",
 							fontWeight: 500,
-							color: colors.secondary[700],
+							color: colors.secondary.onMain,
 							textDecoration: "none",
 						}}
 					>
@@ -127,7 +127,7 @@ export function HomepageContainer() {
 							sx={{
 								fontSize: "1.125rem",
 								lineHeight: 1.65,
-								color: colors.secondary[700],
+								color: colors.secondary.onMain,
 								margin: 0,
 							}}
 						>
@@ -150,10 +150,10 @@ export function HomepageContainer() {
 					<Stack spacing={4}>
 						<Box
 							sx={{
-								background: "#ffffff",
-								border: `1px solid ${colors.secondary[200]}`,
+								background: colors.background.container,
+								border: `1px solid ${colors.neutral.border}`,
 								borderRadius: `${shape.borderRadius}px`,
-								boxShadow: `0 1px 2px ${colors.secondary[200]}, 0 12px 40px -16px ${colors.secondary[300]}`,
+								boxShadow: `0 1px 2px ${colors.neutral.border}, 0 12px 40px -16px ${hexToRgba(colors.secondary.onContainer, 0.12)}`,
 								padding: "clamp(1.5rem, 4vw, 2.25rem)",
 							}}
 						>
@@ -161,7 +161,7 @@ export function HomepageContainer() {
 								<Typography
 									variant="h3"
 									as="h2"
-									sx={{ margin: 0, color: colors.secondary[900] }}
+									sx={{ margin: 0, color: colors.secondary.onContainer }}
 								>
 									Why it exists
 								</Typography>
@@ -190,7 +190,7 @@ export function HomepageContainer() {
 								as="h2"
 								sx={{
 									margin: "0 0 1.25rem",
-									color: colors.secondary[900],
+									color: colors.secondary.onContainer,
 								}}
 							>
 								What that makes possible
@@ -221,12 +221,12 @@ export function HomepageContainer() {
 									<Box
 										key={item.title}
 										sx={{
-											background: "#ffffff",
-											border: `1px solid ${colors.secondary[200]}`,
+											background: colors.background.container,
+											border: `1px solid ${colors.neutral.border}`,
 											borderRadius: `${shape.borderRadius}px`,
-											borderTop: `3px solid ${colors.primary[500]}`,
+											borderTop: `3px solid ${colors.primary.main}`,
 											padding: "1.25rem 1.35rem",
-											boxShadow: `0 1px 2px ${colors.secondary[200]}`,
+											boxShadow: `0 1px 2px ${colors.neutral.border}`,
 										}}
 									>
 										<Stack spacing={2}>
@@ -236,7 +236,7 @@ export function HomepageContainer() {
 												sx={{
 													margin: 0,
 													fontWeight: 600,
-													color: colors.secondary[900],
+													color: colors.secondary.onContainer,
 												}}
 											>
 												{item.title}
@@ -246,7 +246,7 @@ export function HomepageContainer() {
 												as="p"
 												sx={{
 													margin: 0,
-													color: colors.secondary[600],
+													color: colors.secondary.onMain,
 													lineHeight: 1.55,
 												}}
 											>
@@ -273,7 +273,7 @@ export function HomepageContainer() {
 				as="footer"
 				sx={{
 					marginTop: "auto",
-					borderTop: `1px solid ${colors.secondary[200]}`,
+					borderTop: `1px solid ${colors.neutral.border}`,
 					background: "rgba(255, 255, 255, 0.6)",
 					backdropFilter: "blur(8px)",
 				}}

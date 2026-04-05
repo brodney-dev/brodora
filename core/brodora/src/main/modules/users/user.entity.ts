@@ -19,4 +19,7 @@ export class User {
 
 	@Column("varchar", { nullable: true })
 	lastAccessed!: string | null;
+
+	@Column("boolean", { default: false })
+	loggedIn!: boolean;
 }

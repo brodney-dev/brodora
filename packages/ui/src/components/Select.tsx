@@ -69,17 +69,17 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 					}
 				: error
 					? {
-							borderColor: colors.error[500],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.error.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}
 					: {
-							borderColor: colors.secondary[300],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.secondary.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}),
 			...(focused && !isDisabled
-				? { boxShadow: `0 0 0 2px ${colors.primary[200]}` }
+				? { boxShadow: `0 0 0 2px ${colors.primary.container}` }
 				: {}),
 		};
 
@@ -90,7 +90,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 			transform: "translateY(-50%)",
 			pointerEvents: "none",
 			display: "flex",
-			color: isDisabled ? action.disabled : colors.secondary[500],
+			color: isDisabled ? action.disabled : colors.secondary.onMain,
 		};
 
 		return (

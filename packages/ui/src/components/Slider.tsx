@@ -24,11 +24,11 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
 		const sxStyles = useSxStyles(sx);
 		const isDisabled = Boolean(disabled);
 
-		const track = colors.secondary[200];
-		const fill = isDisabled ? action.disabledBorder : colors.primary[500];
+		const track = colors.secondary.main;
+		const fill = isDisabled ? action.disabledBorder : colors.primary.main;
 		const thumbBorder = isDisabled
 			? action.disabledBorder
-			: colors.primary[700];
+			: colors.primary.border;
 		const thumbSize = 18;
 		const thumbOffset = (thumbSize - trackHeight) / 2;
 
@@ -49,7 +49,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
 			background: "transparent",
 			cursor: isDisabled ? "not-allowed" : "pointer",
 			opacity: isDisabled ? (action.disabledOpacity ?? 0.5) : 1,
-			accentColor: colors.primary[600],
+			accentColor: colors.primary.main,
 		};
 
 		return (
@@ -80,7 +80,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
 							height: ${thumbSize}px;
 							margin-top: -${thumbOffset}px;
 							border-radius: 50%;
-							background: #ffffff;
+							background: ${colors.background.container};
 							border: 2px solid ${thumbBorder};
 							box-shadow: 0 1px 2px rgba(0,0,0,0.12);
 						}
@@ -98,7 +98,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
 							width: ${thumbSize}px;
 							height: ${thumbSize}px;
 							border-radius: 50%;
-							background: #ffffff;
+							background: ${colors.background.container};
 							border: 2px solid ${thumbBorder};
 							box-shadow: 0 1px 2px rgba(0,0,0,0.12);
 						}

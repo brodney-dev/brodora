@@ -15,6 +15,7 @@ type IntroWorkspacePageProps = {
 	onComplete: () => void;
 };
 
+/** First-time workspace creation when no users exist in the local database. */
 export function IntroWorkspacePage({ onComplete }: IntroWorkspacePageProps) {
 	const { colors } = useTheme();
 	const [name, setName] = React.useState("");
@@ -36,7 +37,20 @@ export function IntroWorkspacePage({ onComplete }: IntroWorkspacePageProps) {
 				setError("Could not create workspace. Try again.");
 				return;
 			}
-			void window.api.users.recordAccess({ id: created.value.id });
+			const access = await window.api.users.recordAccess({
+				id: created.value.id,
+			});
+			if (O.isNone(access)) {
+				setError("Could not start workspace. Try again.");
+				return;
+			}
+			const login = await window.api.users.setLoggedIn({
+				id: created.value.id,
+			});
+			if (O.isNone(login) || !login.value) {
+				setError("Could not start workspace. Try again.");
+				return;
+			}
 			onComplete();
 		} catch {
 			setError("Could not create workspace. Try again.");
@@ -53,7 +67,7 @@ export function IntroWorkspacePage({ onComplete }: IntroWorkspacePageProps) {
 				alignItems: "center",
 				justifyContent: "center",
 				padding: "2rem",
-				backgroundColor: colors.secondary[100],
+				backgroundColor: colors.background.main,
 			}}
 		>
 			<Card sx={{ width: "100%", maxWidth: "28rem" }}>
@@ -72,7 +86,7 @@ export function IntroWorkspacePage({ onComplete }: IntroWorkspacePageProps) {
 									variant="body-sm"
 									as="p"
 									style={{ margin: 0 }}
-									sx={{ color: (theme) => theme.colors.secondary[600] }}
+									sx={{ color: (theme) => theme.colors.secondary.onMain }}
 								>
 									Create your first workspace. You can add more later; there is
 									no sign-in.

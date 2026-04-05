@@ -108,7 +108,7 @@ export function TabList({
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: "0.25rem",
-		borderBottom: `1px solid ${colors.secondary[200]}`,
+		borderBottom: `1px solid ${colors.neutral.border}`,
 		...sxStyles,
 		...style,
 	};
@@ -229,11 +229,11 @@ export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(function Tab(
 		fontSize: "0.875rem",
 		fontWeight: selected ? 600 : 500,
 		lineHeight: 1.25,
-		color: selected ? colors.primary[700] : colors.secondary[600],
+		color: selected ? colors.primary.onContainer : colors.secondary.onMain,
 		background: "transparent",
 		border: "none",
 		borderBottom: selected
-			? `2px solid ${colors.primary[600]}`
+			? `2px solid ${colors.primary.border}`
 			: "2px solid transparent",
 		borderRadius: `${shape.borderRadius}px ${shape.borderRadius}px 0 0`,
 		cursor: disabled ? "not-allowed" : "pointer",

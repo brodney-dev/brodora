@@ -21,12 +21,22 @@ export class UsersService implements OnModuleInit {
 			await this.recordAccess(id);
 			return true as const;
 		});
+		handleBrodoraApi(BrodoraApi.users.getLoggedIn, async () =>
+			this.getLoggedInSession(),
+		);
+		handleBrodoraApi(BrodoraApi.users.setLoggedIn, async ({ id }) => {
+			return this.setLoggedInUser(id);
+		});
+		handleBrodoraApi(BrodoraApi.users.logout, async () => {
+			await this.clearAllLoggedIn();
+			return true as const;
+		});
 	}
 
 	/** Active users (not soft-deleted), best default first: recent `lastAccessed`, then `id`. */
 	async list(): Promise<UserRow[]> {
 		const rows = await this.userRepo.find();
-		return rows;
+		return rows.map(this.toRow);
 	}
 
 	async create(name: string): Promise<UserRow> {
@@ -37,6 +47,7 @@ export class UsersService implements OnModuleInit {
 			updatedAt: now,
 			deletedAt: null,
 			lastAccessed: now,
+			loggedIn: true,
 		});
 		const saved = await this.userRepo.save(entity);
 		return this.toRow(saved);
@@ -50,6 +61,46 @@ export class UsersService implements OnModuleInit {
 		);
 	}
 
+	async getLoggedInSession(): Promise<{ id: number; name: string } | null> {
+		const row = await this.userRepo.findOne({
+			where: { loggedIn: true, deletedAt: IsNull() },
+		});
+		if (!row) {
+			return null;
+		}
+		return { id: row.id, name: row.name };
+	}
+
+	/** Ensures only this user has `loggedIn === true`. */
+	async setLoggedInUser(id: number): Promise<boolean> {
+		const active = await this.userRepo.findOne({
+			where: { id, deletedAt: IsNull() },
+		});
+		if (!active) {
+			return false;
+		}
+		const now = new Date().toISOString();
+		await this.userRepo
+			.createQueryBuilder()
+			.update(User)
+			.set({ loggedIn: false })
+			.execute();
+		await this.userRepo.update(
+			{ id, deletedAt: IsNull() },
+			{ loggedIn: true, updatedAt: now },
+		);
+		return true;
+	}
+
+	async clearAllLoggedIn(): Promise<void> {
+		const now = new Date().toISOString();
+		await this.userRepo
+			.createQueryBuilder()
+			.update(User)
+			.set({ loggedIn: false, updatedAt: now })
+			.execute();
+	}
+
 	private toRow(u: User): UserRow {
 		return {
 			id: u.id,
@@ -58,6 +109,7 @@ export class UsersService implements OnModuleInit {
 			updatedAt: u.updatedAt,
 			deletedAt: u.deletedAt,
 			lastAccessed: u.lastAccessed,
+			loggedIn: Boolean(u.loggedIn),
 		};
 	}
 }

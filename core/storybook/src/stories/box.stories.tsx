@@ -23,7 +23,7 @@ export const Default: Story = {
 		as: "div",
 		sx: {
 			p: 2,
-			bgcolor: "primary.50",
+			bgcolor: "primary.container",
 			borderRadius: 1,
 		},
 	},

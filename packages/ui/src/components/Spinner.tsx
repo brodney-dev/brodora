@@ -27,7 +27,7 @@ export const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(
 		const { colors } = useTheme();
 		const sxStyles = useSxStyles(sx);
 		const stroke =
-			variant === "muted" ? colors.secondary[500] : colors.primary[600];
+			variant === "muted" ? colors.secondary.onMain : colors.primary.main;
 		const r = 9;
 		const c = 2 * Math.PI * r;
 

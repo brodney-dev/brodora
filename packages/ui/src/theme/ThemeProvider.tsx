@@ -7,8 +7,8 @@ import {
 } from "./defaultColors";
 import { createSpacing } from "./spacing";
 import type {
-	ColorScale,
 	SemanticColorName,
+	SemanticColorTokens,
 	Theme,
 	ThemeAction,
 	ThemeColors,
@@ -19,8 +19,8 @@ const ThemeContext = React.createContext<Theme>(defaultTheme);
 
 export interface ThemeProviderProps {
 	children: React.ReactNode;
-	/** Deep partial override per semantic color and shade. */
-	colors?: Partial<Record<SemanticColorName, Partial<ColorScale>>>;
+	/** Partial override per semantic color and role (`main`, `onMain`, `container`, `onContainer`, `border`). */
+	colors?: Partial<Record<SemanticColorName, Partial<SemanticColorTokens>>>;
 	/** Override disabled / interaction tokens used by components such as `Button`. */
 	action?: Partial<ThemeAction>;
 	/** Override `theme.shape` (e.g. default border radius). */

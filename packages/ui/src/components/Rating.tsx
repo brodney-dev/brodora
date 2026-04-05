@@ -54,8 +54,8 @@ export function Rating({
 		...style,
 	};
 
-	const empty = colors.secondary[300];
-	const filled = colors.warning[500];
+	const empty = colors.secondary.main;
+	const filled = colors.warning.main;
 
 	return (
 		<div className={className} style={rootStyle} {...props}>

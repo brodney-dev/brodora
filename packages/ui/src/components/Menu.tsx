@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type SxProps, useSxStyles } from "../system/sx";
-import { useTheme } from "../theme";
+import { hexToRgba, useTheme } from "../theme";
 
 function mergeRefs<T>(
 	...refs: Array<React.Ref<T> | undefined>
@@ -192,10 +192,10 @@ export const MenuContent = React.forwardRef<HTMLDivElement, MenuContentProps>(
 			maxWidth: "min(20rem, calc(100vw - 2rem))",
 			padding: "0.35rem 0",
 			borderRadius: `${shape.borderRadius}px`,
-			border: `1px solid ${colors.secondary[200]}`,
-			background: "#ffffff",
-			color: colors.secondary[900],
-			boxShadow: `0 18px 45px -20px ${colors.secondary[400]}`,
+			border: `1px solid ${colors.neutral.border}`,
+			background: colors.background.container,
+			color: colors.secondary.onContainer,
+			boxShadow: `0 18px 45px -20px ${hexToRgba(colors.secondary.onContainer, 0.14)}`,
 			...(() => {
 				const isTop = placement.startsWith("top");
 				const isEnd = placement.endsWith("end");
@@ -281,7 +281,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, MenuItemProps>(
 			fontSize: "0.875rem",
 			border: "none",
 			background: "transparent",
-			color: colors.secondary[900],
+			color: colors.secondary.onContainer,
 			cursor: "pointer",
 			...sxStyles,
 			...style,
@@ -323,7 +323,7 @@ export function MenuSeparator({ sx, style }: MenuSeparatorProps) {
 			style={{
 				height: 1,
 				margin: "0.35rem 0",
-				backgroundColor: colors.secondary[200],
+				backgroundColor: colors.neutral.border,
 				border: "none",
 				...sxStyles,
 				...style,

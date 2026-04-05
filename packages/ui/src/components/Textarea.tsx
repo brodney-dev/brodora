@@ -53,7 +53,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 		const labelStyle: React.CSSProperties = {
 			fontSize: "0.875rem",
 			fontWeight: 500,
-			color: colors.secondary[800],
+			color: colors.secondary.onContainer,
 		};
 
 		const fieldStyle: React.CSSProperties = {
@@ -79,24 +79,24 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 					}
 				: error
 					? {
-							borderColor: colors.error[500],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.error.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}
 					: {
-							borderColor: colors.secondary[300],
-							backgroundColor: colors.secondary[50],
-							color: colors.secondary[900],
+							borderColor: colors.secondary.border,
+							backgroundColor: colors.secondary.container,
+							color: colors.secondary.onContainer,
 						}),
 			...(focused && !isDisabled
-				? { boxShadow: `0 0 0 2px ${colors.primary[200]}` }
+				? { boxShadow: `0 0 0 2px ${colors.primary.container}` }
 				: {}),
 		};
 
 		const helperStyle: React.CSSProperties = {
 			fontSize: "0.75rem",
 			lineHeight: 1.4,
-			color: error ? colors.error[600] : colors.secondary[600],
+			color: error ? colors.error.main : colors.secondary.onMain,
 		};
 
 		return (

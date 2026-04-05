@@ -1,5 +1,5 @@
 import { Settings, Trash2 } from "@brodora/icons";
-import { IconButton } from "@brodora/ui";
+import { IconButton, SEMANTIC_COLOR_NAMES } from "@brodora/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
 
@@ -8,6 +8,10 @@ const meta = {
 	component: IconButton,
 	tags: ["autodocs"],
 	argTypes: {
+		color: {
+			control: "select",
+			options: [...SEMANTIC_COLOR_NAMES],
+		},
 		size: {
 			control: "select",
 			options: ["sm", "md", "lg"],
@@ -22,6 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
+		color: "secondary",
 		size: "md",
 		disabled: false,
 	},

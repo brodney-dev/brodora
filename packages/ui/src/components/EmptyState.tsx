@@ -28,7 +28,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
 			padding: "2rem 1.25rem",
 			maxWidth: "28rem",
 			margin: "0 auto",
-			color: colors.secondary[700],
+			color: colors.secondary.onMain,
 			...sxStyles,
 			...style,
 		};
@@ -37,7 +37,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
 			margin: 0,
 			fontSize: "1.125rem",
 			fontWeight: 600,
-			color: colors.secondary[900],
+			color: colors.secondary.onContainer,
 		};
 
 		const descStyle: React.CSSProperties = {

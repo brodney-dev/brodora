@@ -17,9 +17,9 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
 
 	const rootStyle: React.CSSProperties = {
 		backgroundColor: "#ffffff",
-		border: `1px solid ${colors.secondary[200]}`,
+		border: `1px solid ${colors.neutral.border}`,
 		borderRadius: `${shape.borderRadius}px`,
-		boxShadow: `0 1px 2px ${colors.secondary[200]}`,
+		boxShadow: `0 1px 2px ${colors.neutral.border}`,
 		overflow: "hidden",
 		...sxStyles,
 		...style,
@@ -50,7 +50,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardSectionProps>(
 				className={className}
 				style={{
 					padding: "1rem 1.25rem",
-					borderBottom: `1px solid ${colors.secondary[200]}`,
+					borderBottom: `1px solid ${colors.neutral.border}`,
 					...sxStyles,
 					...style,
 				}}
@@ -92,7 +92,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, CardSectionProps>(
 				className={className}
 				style={{
 					padding: "1rem 1.25rem",
-					borderTop: `1px solid ${colors.secondary[200]}`,
+					borderTop: `1px solid ${colors.neutral.border}`,
 					display: "flex",
 					justifyContent: "flex-end",
 					gap: "0.5rem",

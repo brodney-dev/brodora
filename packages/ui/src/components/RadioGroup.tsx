@@ -175,14 +175,14 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
 			width: "1.125rem",
 			height: "1.125rem",
 			flexShrink: 0,
-			accentColor: colors.primary[600],
+			accentColor: colors.primary.main,
 			cursor: isDisabled ? "not-allowed" : "pointer",
 			opacity: isDisabled ? (action.disabledOpacity ?? 0.5) : 1,
 		};
 
 		const labelTextStyle: React.CSSProperties = {
 			fontSize: "0.875rem",
-			color: isDisabled ? action.disabled : colors.secondary[900],
+			color: isDisabled ? action.disabled : colors.secondary.onContainer,
 		};
 
 		return (

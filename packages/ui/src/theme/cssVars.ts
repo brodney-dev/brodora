@@ -1,14 +1,14 @@
 import { SEMANTIC_COLOR_NAMES } from "./constants";
 import type {
-	ColorScale,
 	SemanticColorName,
+	SemanticColorTokens,
 	ThemeAction,
 	ThemeColors,
 } from "./types";
 
 export function mergeThemeColors(
 	base: ThemeColors,
-	override?: Partial<Record<SemanticColorName, Partial<ColorScale>>>,
+	override?: Partial<Record<SemanticColorName, Partial<SemanticColorTokens>>>,
 ): ThemeColors {
 	if (!override) return base;
 	const next = { ...base };

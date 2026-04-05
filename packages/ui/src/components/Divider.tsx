@@ -33,7 +33,7 @@ export const Divider = React.forwardRef<HTMLHRElement, DividerProps>(
 						minHeight: "1em",
 						margin: "0 0.5rem",
 						border: "none",
-						backgroundColor: colors.secondary[200],
+						backgroundColor: colors.neutral.border,
 						flexShrink: 0,
 					}
 				: {
@@ -42,7 +42,7 @@ export const Divider = React.forwardRef<HTMLHRElement, DividerProps>(
 						height: 1,
 						margin: "0.5rem 0",
 						border: "none",
-						backgroundColor: colors.secondary[200],
+						backgroundColor: colors.neutral.border,
 						flexShrink: 0,
 					};
 

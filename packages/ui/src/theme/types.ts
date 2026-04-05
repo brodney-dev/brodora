@@ -4,23 +4,21 @@ export type SemanticColorName =
 	| "error"
 	| "success"
 	| "info"
-	| "warning";
+	| "warning"
+	| "background"
+	| "neutral"
+	| "inverse";
 
-export type ColorShade =
-	| 50
-	| 100
-	| 200
-	| 300
-	| 400
-	| 500
-	| 600
-	| 700
-	| 800
-	| 900;
+/** Per-role tokens: surfaces, text-on-surface, and a dedicated border for each ramp. */
+export interface SemanticColorTokens {
+	main: string;
+	onMain: string;
+	container: string;
+	onContainer: string;
+	border: string;
+}
 
-export type ColorScale = Record<ColorShade, string>;
-
-export type ThemeColors = Record<SemanticColorName, ColorScale>;
+export type ThemeColors = Record<SemanticColorName, SemanticColorTokens>;
 
 export interface ThemeAction {
 	disabled: string;

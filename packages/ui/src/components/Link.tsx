@@ -14,7 +14,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 		const sxStyles = useSxStyles(sx);
 
 		const anchorStyle: React.CSSProperties = {
-			color: colors.primary[600],
+			color: colors.primary.main,
 			textDecoration: "underline",
 			textUnderlineOffset: "0.12em",
 			cursor: "pointer",

@@ -16,7 +16,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 			width: "100%",
 			borderCollapse: "collapse",
 			fontSize: "0.875rem",
-			border: `1px solid ${colors.secondary[200]}`,
+			border: `1px solid ${colors.neutral.border}`,
 			borderRadius: `${shape.borderRadius}px`,
 			overflow: "hidden",
 			...sxStyles,
@@ -49,7 +49,7 @@ export const TableHead = React.forwardRef<
 			ref={ref}
 			className={className}
 			style={{
-				backgroundColor: colors.secondary[50],
+				backgroundColor: colors.secondary.container,
 				...sxStyles,
 				...style,
 			}}
@@ -96,7 +96,7 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
 				ref={ref}
 				className={className}
 				style={{
-					borderTop: `1px solid ${colors.secondary[200]}`,
+					borderTop: `1px solid ${colors.neutral.border}`,
 					...sxStyles,
 					...style,
 				}}
@@ -155,7 +155,7 @@ export const TableHeaderCell = React.forwardRef<
 				padding: "0.625rem 0.75rem",
 				textAlign: "left",
 				fontWeight: 600,
-				color: colors.secondary[800],
+				color: colors.secondary.onContainer,
 				...sxStyles,
 				...style,
 			}}

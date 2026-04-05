@@ -1,4 +1,9 @@
-import { LinearProgress, Stack, Typography } from "@brodora/ui";
+import {
+	LinearProgress,
+	SEMANTIC_COLOR_NAMES,
+	Stack,
+	Typography,
+} from "@brodora/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
 
@@ -7,7 +12,10 @@ const meta = {
 	component: LinearProgress,
 	tags: ["autodocs"],
 	argTypes: {
-		variant: { control: "select", options: ["primary", "success", "error"] },
+		color: {
+			control: "select",
+			options: [...SEMANTIC_COLOR_NAMES],
+		},
 		height: { control: "number" },
 	},
 } satisfies Meta<typeof LinearProgress>;
@@ -18,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Indeterminate: Story = {
 	args: {
-		variant: "primary",
+		color: "primary",
 		height: 6,
 	},
 };
@@ -26,7 +34,7 @@ export const Indeterminate: Story = {
 export const Determinate: Story = {
 	args: {
 		value: 35,
-		variant: "primary",
+		color: "primary",
 		height: 6,
 	},
 };
@@ -45,7 +53,7 @@ export const Animated: Story = {
 				<Typography variant="body-sm" as="p" style={{ margin: 0 }}>
 					Value: {value}%
 				</Typography>
-				<LinearProgress value={value} />
+				<LinearProgress value={value} color="primary" />
 			</Stack>
 		);
 	},

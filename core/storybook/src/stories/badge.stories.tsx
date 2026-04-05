@@ -1,4 +1,4 @@
-import { Badge } from "@brodora/ui";
+import { Badge, SEMANTIC_COLOR_NAMES } from "@brodora/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
@@ -6,9 +6,13 @@ const meta = {
 	component: Badge,
 	tags: ["autodocs"],
 	argTypes: {
-		variant: {
+		color: {
 			control: "select",
-			options: ["default", "primary", "success", "warning", "error", "outline"],
+			options: [...SEMANTIC_COLOR_NAMES],
+		},
+		appearance: {
+			control: "select",
+			options: ["soft", "outline"],
 		},
 		size: {
 			control: "select",
@@ -24,7 +28,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		children: "Beta",
-		variant: "default",
+		color: "neutral",
+		appearance: "soft",
 		size: "sm",
 	},
 };
@@ -32,7 +37,8 @@ export const Default: Story = {
 export const Primary: Story = {
 	args: {
 		children: "New",
-		variant: "primary",
+		color: "primary",
+		appearance: "soft",
 		size: "md",
 	},
 };

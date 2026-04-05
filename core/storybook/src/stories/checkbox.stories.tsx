@@ -1,4 +1,4 @@
-import { Checkbox } from "@brodora/ui";
+import { Checkbox, SEMANTIC_COLOR_NAMES } from "@brodora/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
@@ -6,6 +6,10 @@ const meta = {
 	component: Checkbox,
 	tags: ["autodocs"],
 	argTypes: {
+		color: {
+			control: "select",
+			options: [...SEMANTIC_COLOR_NAMES],
+		},
 		checked: {
 			control: "select",
 			options: [undefined, true, false, "indeterminate"],
@@ -20,6 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
+		color: "primary",
 		defaultChecked: false,
 		disabled: false,
 	},

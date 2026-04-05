@@ -1,17 +1,12 @@
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
-export type TagVariant =
-	| "default"
-	| "primary"
-	| "success"
-	| "warning"
-	| "error";
-
 export interface TagProps
 	extends Omit<React.HTMLAttributes<HTMLSpanElement>, "style"> {
-	variant?: TagVariant;
+	/** Semantic palette for fill, text, and border. */
+	color?: ThemeColorName;
 	/** When set, shows a remove control and calls this on click. */
 	onRemove?: () => void;
 	removeLabel?: string;
@@ -21,7 +16,7 @@ export interface TagProps
 
 export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(function Tag(
 	{
-		variant = "default",
+		color: colorProp = "neutral",
 		onRemove,
 		removeLabel = "Remove",
 		sx,
@@ -34,41 +29,7 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(function Tag(
 ) {
 	const { colors, shape } = useTheme();
 	const sxStyles = useSxStyles(sx);
-
-	const palette = (() => {
-		switch (variant) {
-			case "primary":
-				return {
-					bg: colors.primary[50],
-					fg: colors.primary[800],
-					border: colors.primary[200],
-				};
-			case "success":
-				return {
-					bg: colors.success[50],
-					fg: colors.success[900],
-					border: colors.success[200],
-				};
-			case "warning":
-				return {
-					bg: colors.warning[50],
-					fg: colors.warning[900],
-					border: colors.warning[200],
-				};
-			case "error":
-				return {
-					bg: colors.error[50],
-					fg: colors.error[900],
-					border: colors.error[200],
-				};
-			default:
-				return {
-					bg: colors.secondary[100],
-					fg: colors.secondary[800],
-					border: colors.secondary[200],
-				};
-		}
-	})();
+	const palette = colors[colorProp];
 
 	const rootStyle: React.CSSProperties = {
 		display: "inline-flex",
@@ -81,8 +42,8 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(function Tag(
 		fontWeight: 500,
 		borderRadius: `${shape.borderRadius}px`,
 		border: `1px solid ${palette.border}`,
-		backgroundColor: palette.bg,
-		color: palette.fg,
+		backgroundColor: palette.container,
+		color: palette.onContainer,
 		...sxStyles,
 		...style,
 	};

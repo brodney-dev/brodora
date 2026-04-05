@@ -28,14 +28,14 @@ export const Breadcrumbs = React.forwardRef<HTMLElement, BreadcrumbsProps>(
 
 		const navStyle: React.CSSProperties = {
 			fontSize: "0.875rem",
-			color: colors.secondary[600],
+			color: colors.secondary.onMain,
 			...sxStyles,
 			...style,
 		};
 
 		const sepStyle: React.CSSProperties = {
 			margin: "0 0.35rem",
-			color: colors.secondary[400],
+			color: colors.secondary.onMain,
 			userSelect: "none",
 		};
 
@@ -68,8 +68,8 @@ export const Breadcrumbs = React.forwardRef<HTMLElement, BreadcrumbsProps>(
 									<span
 										style={{
 											color: isLast
-												? colors.secondary[900]
-												: colors.secondary[600],
+												? colors.secondary.onContainer
+												: colors.secondary.onMain,
 											fontWeight: isLast ? 600 : 400,
 										}}
 									>

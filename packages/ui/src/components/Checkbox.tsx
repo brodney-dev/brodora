@@ -1,5 +1,6 @@
 import { Check, Minus } from "@brodora/icons";
 import * as React from "react";
+import type { ThemeColorName } from "../system/color";
 import { type SxProps, useSxStyles } from "../system/sx";
 import { useTheme } from "../theme";
 
@@ -9,6 +10,8 @@ export type CheckboxProps = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
 	"checked" | "defaultChecked" | "onChange" | "size" | "type"
 > & {
+	/** Semantic palette when checked or indeterminate. */
+	color?: ThemeColorName;
 	checked?: boolean | "indeterminate";
 	defaultChecked?: boolean | "indeterminate";
 	onCheckedChange?: (checked: CheckedState) => void;
@@ -32,6 +35,7 @@ function mergeRefs<T>(
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 	function Checkbox(
 		{
+			color: colorProp = "primary",
 			sx,
 			style,
 			disabled,
@@ -49,6 +53,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 		const isDisabled = Boolean(disabled);
 		const inputRef = React.useRef<HTMLInputElement>(null);
 		const setRefs = mergeRefs(ref, inputRef);
+		const accent = colors[colorProp];
 
 		const [internalChecked, setInternalChecked] = React.useState<CheckedState>(
 			() => {
@@ -113,13 +118,13 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 					}
 				: showIndicator
 					? {
-							borderColor: colors.primary[600],
-							backgroundColor: colors.primary[600],
-							color: "#ffffff",
+							borderColor: accent.border,
+							backgroundColor: accent.main,
+							color: accent.onMain,
 						}
 					: {
-							borderColor: colors.secondary[300],
-							backgroundColor: colors.secondary[50],
+							borderColor: colors.secondary.border,
+							backgroundColor: colors.secondary.container,
 						}),
 			...sxStyles,
 			...style,

@@ -1,45 +1,48 @@
-import { Stack, Typography, useTheme } from "@brodora/ui";
+import { Typography } from "@brodora/ui";
 import * as React from "react";
 
-function Versions(): React.JSX.Element {
-	const [versions] = React.useState(window.electron.process.versions);
-	const { colors } = useTheme();
+type ElectronVersions = {
+	electron?: string;
+	chrome?: string;
+	node?: string;
+};
 
-	return (
-		<Stack
-			direction="row"
-			spacing={2}
-			style={{
-				flexWrap: "wrap",
-				padding: "0.75rem 1rem",
-				borderRadius: "0.75rem",
-				backgroundColor: colors.secondary[100],
-				border: `1px solid ${colors.secondary[200]}`,
-			}}
-		>
-			<Typography
-				variant="caption"
-				as="span"
-				sx={{ color: (theme) => theme.colors.secondary[600] }}
-			>
-				Electron v{versions.electron}
-			</Typography>
-			<Typography
-				variant="caption"
-				as="span"
-				sx={{ color: (theme) => theme.colors.secondary[600] }}
-			>
-				Chromium v{versions.chrome}
-			</Typography>
-			<Typography
-				variant="caption"
-				as="span"
-				sx={{ color: (theme) => theme.colors.secondary[600] }}
-			>
-				Node v{versions.node}
-			</Typography>
-		</Stack>
-	);
+function readVersions(): string {
+	const proc = (
+		window as unknown as {
+			electron?: { process?: { versions?: ElectronVersions } };
+		}
+	).electron?.process?.versions;
+	if (!proc) {
+		return "";
+	}
+	const parts = [
+		proc.electron != null ? `Electron ${proc.electron}` : null,
+		proc.chrome != null ? `Chrome ${proc.chrome}` : null,
+		proc.node != null ? `Node ${proc.node}` : null,
+	].filter(Boolean);
+	return parts.join(" · ");
 }
 
-export default Versions;
+export default function Versions() {
+	const [line, setLine] = React.useState("");
+
+	React.useEffect(() => {
+		setLine(readVersions());
+	}, []);
+
+	if (!line) {
+		return null;
+	}
+
+	return (
+		<Typography
+			variant="caption"
+			as="p"
+			style={{ margin: 0 }}
+			sx={{ color: (theme) => theme.colors.secondary.onMain }}
+		>
+			{line}
+		</Typography>
+	);
+}
