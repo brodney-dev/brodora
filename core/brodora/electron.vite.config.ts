@@ -8,10 +8,12 @@ export default defineConfig({
 			rollupOptions: {
 				external: [
 					"better-sqlite3",
+					"express",
 					"reflect-metadata",
 					/^@nestjs\//,
 					"typeorm",
 					/^typeorm\//,
+					"ws",
 				],
 			},
 		},

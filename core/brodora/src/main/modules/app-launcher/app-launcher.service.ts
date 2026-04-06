@@ -8,12 +8,11 @@ import {
 	type OnModuleInit,
 } from "@nestjs/common";
 import { BrodoraApi } from "../../../shared/api";
-import type {
+import {
 	LaunchedApp,
 	LaunchedAppMode,
 } from "../../../shared/api/launched-apps";
 import { handleBrodoraApi } from "../../system/api/api";
-import { broadcastLaunchedAppsState } from "../../system/ipc/broadcast-launched-apps";
 
 /**
  * Spawns another Electron app as a child process (same `electron` binary as Brodora).
@@ -129,10 +128,6 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 		return rows;
 	}
 
-	private emitRunningApps(): void {
-		broadcastLaunchedAppsState(this.getSnapshot());
-	}
-
 	private registerProcess(
 		proc: ChildProcess,
 		meta: { label: string; mode: LaunchedAppMode; appRoot: string },
@@ -154,7 +149,6 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 			}
 			cleaned = true;
 			this.processes.delete(id);
-			this.emitRunningApps();
 		};
 
 		proc.on("error", (err) => {
@@ -167,8 +161,6 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 			);
 			cleanup();
 		});
-
-		this.emitRunningApps();
 	}
 
 	/**
@@ -180,7 +172,10 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 		for (const key of DEV_ENV_KEYS_TO_STRIP_FOR_CHILD) {
 			delete env[key];
 		}
-		return env;
+		return {
+			...env,
+			BRODORA_HTTP_PORT: String(process.env.BRODORA_HTTP_PORT ?? "19842"),
+		};
 	}
 
 	/** `core/test-app` next to `core/brodora` (from `out/main/index.js`, three levels up to `core`). */
@@ -195,6 +190,5 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 			}
 		}
 		this.processes.clear();
-		this.emitRunningApps();
 	}
 }

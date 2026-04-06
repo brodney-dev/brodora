@@ -12,6 +12,7 @@ export default defineConfig({
 					/^@nestjs\//,
 					"typeorm",
 					/^typeorm\//,
+					"ws",
 				],
 			},
 		},

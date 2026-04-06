@@ -3,9 +3,25 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { NestFactory } from "@nestjs/core";
+import { WsAdapter } from "@nestjs/platform-ws";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import icon from "../../resources/icon.png?asset";
 import { AppModule } from "./modules/app.module";
+
+const BRODORA_HTTP_PORT_ENV = "BRODORA_HTTP_PORT";
+const DEFAULT_BRODORA_HTTP_PORT = 19842;
+
+function resolveListenPort(): number {
+	const raw = process.env[BRODORA_HTTP_PORT_ENV];
+	if (raw === undefined || raw === "") {
+		return DEFAULT_BRODORA_HTTP_PORT;
+	}
+	const n = Number(raw);
+	if (!Number.isInteger(n) || n < 1 || n > 65535) {
+		return DEFAULT_BRODORA_HTTP_PORT;
+	}
+	return n;
+}
 
 /** ESM preload build emits `index.mjs`; dev / legacy CJS uses `index.js`. */
 function resolvePreloadPath(): string {
@@ -66,10 +82,15 @@ app.whenReady().then(async () => {
 	// IPC test
 	ipcMain.on("ping", () => console.log("pong"));
 
-	const nestApp = await NestFactory.createApplicationContext(
+	const port = resolveListenPort();
+	const nestApp = await NestFactory.create(
 		AppModule.forRoot(app.getPath("userData")),
 		{ logger: ["verbose", "debug", "log", "warn", "error", "fatal"] },
 	);
+	nestApp.useWebSocketAdapter(new WsAdapter(nestApp));
+	nestApp.enableCors({ origin: true });
+	await nestApp.listen(port, "127.0.0.1");
+	process.env[BRODORA_HTTP_PORT_ENV] = String(port);
 
 	app.on("before-quit", () => {
 		void nestApp.close();

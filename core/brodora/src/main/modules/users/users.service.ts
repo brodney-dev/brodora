@@ -1,16 +1,19 @@
-import { Injectable, type OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { IsNull, type Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { BrodoraApi } from "../../../shared/api";
-import type { UserRow } from "../../../shared/api/users.api";
+import { SessionUserState } from "../../../shared/api/session-user";
+import { UserRow } from "../../../shared/api/users.api";
 import { handleBrodoraApi } from "../../system/api/api";
 import { broadcastSessionUserState } from "../../system/ipc/broadcast-session-user";
+import { EventsService } from "../events/events.service";
 import { User } from "./user.entity";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
 	constructor(
 		@InjectRepository(User) private readonly userRepo: Repository<User>,
+		private readonly events: EventsService,
 	) {}
 
 	onModuleInit(): void {
@@ -52,7 +55,7 @@ export class UsersService implements OnModuleInit {
 		});
 		const saved = await this.userRepo.save(entity);
 		const row = this.toRow(saved);
-		broadcastSessionUserState({ id: row.id, name: row.name });
+		this.publishSessionUser({ id: row.id, name: row.name });
 		return row;
 	}
 
@@ -62,6 +65,17 @@ export class UsersService implements OnModuleInit {
 			{ id, deletedAt: IsNull() },
 			{ lastAccessed: now, updatedAt: now },
 		);
+	}
+
+	/** Active (non–soft-deleted) user by id, or `null`. */
+	async getById(id: number): Promise<UserRow | null> {
+		const entity = await this.userRepo.findOne({
+			where: { id, deletedAt: IsNull() },
+		});
+		if (!entity) {
+			return null;
+		}
+		return this.toRow(entity);
 	}
 
 	async getLoggedInSession(): Promise<{ id: number; name: string } | null> {
@@ -92,7 +106,7 @@ export class UsersService implements OnModuleInit {
 			{ id, deletedAt: IsNull() },
 			{ loggedIn: true, updatedAt: now },
 		);
-		broadcastSessionUserState({ id, name: active.name });
+		this.publishSessionUser({ id, name: active.name });
 		return true;
 	}
 
@@ -103,7 +117,12 @@ export class UsersService implements OnModuleInit {
 			.update(User)
 			.set({ loggedIn: false, updatedAt: now })
 			.execute();
-		broadcastSessionUserState(null);
+		this.publishSessionUser(null);
+	}
+
+	private publishSessionUser(payload: SessionUserState): void {
+		broadcastSessionUserState(payload);
+		this.events.broadcast("sessionUser", payload);
 	}
 
 	private toRow(u: User): UserRow {
