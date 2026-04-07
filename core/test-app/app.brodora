@@ -1,0 +1,9 @@
+// app.brodora
+{
+  "appId": "com.brodora.test-app",
+  "name": "My App",
+  "version": "1.0.0",
+  "apiVersion": "1.0.0",
+  "main": "dist/main.js",
+  "devScript": "dev"
+}

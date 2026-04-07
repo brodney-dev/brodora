@@ -15,10 +15,18 @@ export const LauncherApi = {
 		inputValidator: z.void(),
 		outputValidator: z.boolean(),
 	}),
-	/** Runs `pnpm run dev` in `core/test-app` (electron-vite dev server + Electron). */
+	/** Runs `npm run dev` in `core/test-app` (electron-vite dev server + Electron). */
 	launchTestAppDev: new BrodoraApiHandler({
 		key: "launcher:launchTestAppDev",
 		inputValidator: z.void(),
+		outputValidator: z.boolean(),
+	}),
+	/**
+	 * Runs `npm run <devScript>` in `dev_apps.source_path` for the given row (from SQLite).
+	 */
+	launchDevApp: new BrodoraApiHandler({
+		key: "launcher:launchDevApp",
+		inputValidator: z.object({ devAppId: z.number().int().positive() }),
 		outputValidator: z.boolean(),
 	}),
 };

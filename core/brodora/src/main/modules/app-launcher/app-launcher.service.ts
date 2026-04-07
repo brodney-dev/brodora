@@ -7,12 +7,15 @@ import {
 	type OnModuleDestroy,
 	type OnModuleInit,
 } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import type { Repository } from "typeorm";
 import { BrodoraApi } from "../../../shared/api";
 import {
 	LaunchedApp,
 	LaunchedAppMode,
 } from "../../../shared/api/launched-apps";
 import { handleBrodoraApi } from "../../system/api/api";
+import { DevApp } from "../apps/dev/dev-app.entity";
 
 /**
  * Spawns another Electron app as a child process (same `electron` binary as Brodora).
@@ -32,6 +35,11 @@ type TrackedProcess = {
 export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 	private readonly logger = new Logger(AppLauncherService.name);
 	private readonly processes = new Map<string, TrackedProcess>();
+
+	constructor(
+		@InjectRepository(DevApp)
+		private readonly devAppRepo: Repository<DevApp>,
+	) {}
 
 	onModuleInit(): void {
 		handleBrodoraApi(BrodoraApi.launcher.getLaunchedApps, async () =>
@@ -54,6 +62,15 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 			} catch (err) {
 				const message = err instanceof Error ? err.message : String(err);
 				this.logger.error(`launchTestAppDev failed: ${message}`);
+				return false;
+			}
+		});
+		handleBrodoraApi(BrodoraApi.launcher.launchDevApp, async ({ devAppId }) => {
+			try {
+				return await this.launchDevAppById(devAppId);
+			} catch (err) {
+				const message = err instanceof Error ? err.message : String(err);
+				this.logger.error(`launchDevApp failed: ${message}`);
 				return false;
 			}
 		});
@@ -89,15 +106,13 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 	}
 
 	/**
-	 * Runs the app's `pnpm run dev` (electron-vite) in `appRoot`. Strips parent's
-	 * `ELECTRON_RENDERER_URL` so electron-vite sets URLs for this app only.
+	 * Runs `npm run <devScript>` in `appRoot`. Strips parent's `ELECTRON_RENDERER_URL` so
+	 * electron-vite (or similar) sets URLs for this app only.
 	 */
-	launchDev(appRoot: string = this.defaultTestAppRoot()): ChildProcess {
-		const pnpmCmd = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+	launchDevAt(appRoot: string, devScript: string, label: string): ChildProcess {
+		this.logger.log(`Launching dev (npm run ${devScript}) at ${appRoot}`);
 
-		this.logger.log(`Launching dev (pnpm run dev) at ${appRoot}`);
-
-		const proc = spawn(pnpmCmd, ["run", "dev"], {
+		const proc = spawn("npm", ["run", devScript], {
 			cwd: appRoot,
 			env: this.envForLaunchedApp(),
 			stdio: ["ignore", "pipe", "pipe"],
@@ -105,12 +120,28 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 		});
 
 		this.registerProcess(proc, {
-			label: "Test app (dev)",
+			label,
 			mode: "development",
 			appRoot,
 		});
 
 		return proc;
+	}
+
+	/** Runs `npm run dev` in `appRoot` (default: monorepo test app). */
+	launchDev(appRoot: string = this.defaultTestAppRoot()): ChildProcess {
+		return this.launchDevAt(appRoot, "dev", "Test app (dev)");
+	}
+
+	/** Looks up `dev_apps` by id and starts its dev script in `source_path`. */
+	async launchDevAppById(devAppId: number): Promise<boolean> {
+		const r = await this.devAppRepo.findOne({ where: { id: devAppId } });
+		if (!r) {
+			this.logger.warn(`launchDevApp: no dev_apps row for id=${devAppId}`);
+			return false;
+		}
+		this.launchDevAt(r.sourcePath, r.devScript, `${r.name} (dev)`);
+		return true;
 	}
 
 	getSnapshot(): LaunchedApp[] {

@@ -16,10 +16,11 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
 	const sxStyles = useSxStyles(sx);
 
 	const rootStyle: React.CSSProperties = {
-		backgroundColor: "#ffffff",
-		border: `1px solid ${colors.neutral.border}`,
+		backgroundColor: colors.background.container,
+		color: colors.background.onContainer,
+		border: `1px solid ${colors.background.border}`,
 		borderRadius: `${shape.borderRadius}px`,
-		boxShadow: `0 1px 2px ${colors.neutral.border}`,
+		boxShadow: `0 1px 2px ${colors.background.border}`,
 		overflow: "hidden",
 		...sxStyles,
 		...style,
@@ -50,7 +51,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardSectionProps>(
 				className={className}
 				style={{
 					padding: "1rem 1.25rem",
-					borderBottom: `1px solid ${colors.neutral.border}`,
+					borderBottom: `1px solid ${colors.background.border}`,
 					...sxStyles,
 					...style,
 				}}
@@ -92,7 +93,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, CardSectionProps>(
 				className={className}
 				style={{
 					padding: "1rem 1.25rem",
-					borderTop: `1px solid ${colors.neutral.border}`,
+					borderTop: `1px solid ${colors.background.border}`,
 					display: "flex",
 					justifyContent: "flex-end",
 					gap: "0.5rem",

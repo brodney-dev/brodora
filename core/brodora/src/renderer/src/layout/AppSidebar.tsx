@@ -1,14 +1,17 @@
 import { ChevronDown } from "@brodora/icons";
-import { Box, Divider, NavItem, Stack, useTheme } from "@brodora/ui";
+import {
+	Box,
+	Divider,
+	NavItem,
+	NavItemProps,
+	Stack,
+	useTheme,
+} from "@brodora/ui";
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDevApps } from "../library/useDevApps";
 import { useLibraryApps } from "../library/useLibraryApps";
 import { ProfileMenu } from "./ProfileMenu";
-
-/** Hardcoded installed apps until a real catalog exists. */
-const LIBRARY_APPS: { id: string; label: string; to: string }[] = [
-	{ id: "test-app", label: "Test app", to: "/library/app/test-app" },
-];
 
 const sidebarNavSx = {
 	padding: "0.125rem 0.4rem",
@@ -19,21 +22,73 @@ const sidebarNavSx = {
 	gap: "0.35rem",
 } as const;
 
+const NavSection = ({
+	items,
+	title,
+}: {
+	items: (NavItemProps & { onClick: () => void })[];
+	title: string;
+}) => {
+	const [open, setOpen] = React.useState(true);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return (
+		<Stack sx={{ gap: 0.5 }}>
+			<Divider sx={{ width: "100%", flexShrink: 0, my: 0.25 }} />
+
+			<NavItem
+				fullWidth
+				sx={sidebarNavSx}
+				endNode={
+					<ChevronDown
+						size={14}
+						style={{
+							transform: open ? "rotate(180deg)" : "rotate(0deg)",
+							transition: "transform 0.2s ease-in-out",
+						}}
+					/>
+				}
+				onClick={() => setOpen(!open)}
+			>
+				{`(${items.length}) ${title}`}
+			</NavItem>
+			{open && (
+				<Stack>
+					{items.map((app) => {
+						return (
+							<NavItem key={`catalog-${app.id}`} sx={sidebarNavSx} {...app}>
+								{app.name}
+							</NavItem>
+						);
+					})}
+				</Stack>
+			)}
+		</Stack>
+	);
+};
+
 export function AppSidebar() {
 	const { colors } = useTheme();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [query] = React.useState("");
 
-	const filteredInstalled = React.useMemo(() => {
+	const { rows: devApps } = useDevApps();
+	const filteredDevApps = React.useMemo(() => {
 		const q = query.trim().toLowerCase();
 		if (!q) {
-			return LIBRARY_APPS;
+			return devApps;
 		}
-		return LIBRARY_APPS.filter((app) => app.label.toLowerCase().includes(q));
-	}, [query]);
+		return devApps.filter(
+			(a) =>
+				a.name.toLowerCase().includes(q) || a.appId.toLowerCase().includes(q),
+		);
+	}, [devApps, query]);
 
-	const catalogApps = useLibraryApps();
+	const { rows: catalogApps } = useLibraryApps();
 	const filteredCatalogApps = React.useMemo(() => {
 		const q = query.trim().toLowerCase();
 		if (!q) {
@@ -44,9 +99,6 @@ export function AppSidebar() {
 				a.name.toLowerCase().includes(q) || a.appId.toLowerCase().includes(q),
 		);
 	}, [catalogApps, query]);
-
-	const [installedAppsOpen, setInstalledAppsOpen] = React.useState(true);
-	const [catalogAppsOpen, setCatalogAppsOpen] = React.useState(false);
 
 	return (
 		<Stack
@@ -64,79 +116,32 @@ export function AppSidebar() {
 				<ProfileMenu fullWidth />
 			</Box>
 			<Divider sx={{ width: "100%", flexShrink: 0, my: 0.25 }} />
-
 			<NavItem
 				fullWidth
 				sx={sidebarNavSx}
-				endNode={
-					<ChevronDown
-						size={14}
-						style={{
-							transform: installedAppsOpen ? "rotate(180deg)" : "rotate(0deg)",
-							transition: "transform 0.2s ease-in-out",
-						}}
-					/>
-				}
-				onClick={() => setInstalledAppsOpen(!installedAppsOpen)}
+				active={location.pathname === "/library"}
+				onClick={() => navigate("/library")}
 			>
-				{`(${LIBRARY_APPS.length}) INSTALLED`}
+				Home
 			</NavItem>
-			{installedAppsOpen ? (
-				<Stack>
-					{filteredInstalled.map((app) => {
-						const active = location.pathname === app.to;
-						return (
-							<NavItem
-								key={app.id}
-								active={active}
-								fullWidth
-								sx={sidebarNavSx}
-								onClick={() => navigate(app.to)}
-							>
-								{app.label}
-							</NavItem>
-						);
-					})}
-				</Stack>
-			) : null}
-
-			<Divider sx={{ width: "100%", flexShrink: 0, my: 0.25 }} />
-
-			<NavItem
-				fullWidth
-				sx={sidebarNavSx}
-				endNode={
-					<ChevronDown
-						size={14}
-						style={{
-							transform: catalogAppsOpen ? "rotate(180deg)" : "rotate(0deg)",
-							transition: "transform 0.2s ease-in-out",
-						}}
-					/>
-				}
-				onClick={() => setCatalogAppsOpen(!catalogAppsOpen)}
-			>
-				{`(${catalogApps.length}) LIBRARY`}
-			</NavItem>
-			{catalogAppsOpen && (
-				<Stack>
-					{filteredCatalogApps.map((app) => {
-						const to = `/library/catalog/${app.id}`;
-						const active = location.pathname === to;
-						return (
-							<NavItem
-								key={`catalog-${app.id}`}
-								active={active}
-								fullWidth
-								sx={sidebarNavSx}
-								onClick={() => navigate(to)}
-							>
-								{app.name}
-							</NavItem>
-						);
-					})}
-				</Stack>
-			)}
+			<NavSection
+				items={filteredCatalogApps.map((app) => ({
+					name: app.name,
+					id: app.id.toString(),
+					active: location.pathname === `/library/app/${app.id}`,
+					onClick: () => navigate(`/library/app/${app.id}`),
+				}))}
+				title="LIBRARY"
+			/>
+			<NavSection
+				items={filteredDevApps.map((app) => ({
+					name: app.name,
+					id: app.id.toString(),
+					active: location.pathname === `/library/dev/${app.id}`,
+					onClick: () => navigate(`/library/dev/${app.id}`),
+				}))}
+				title="DEV APPS"
+			/>
 		</Stack>
 	);
 }

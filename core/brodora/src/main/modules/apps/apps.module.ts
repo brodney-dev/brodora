@@ -1,11 +1,8 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../users/user.entity";
-import { AppsService } from "./apps.service";
-import { LibraryApp } from "./library-app.entity";
+import { DevModule } from "./dev/dev.module";
+import { LibraryModule } from "./library/library.module";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([LibraryApp, User])],
-	providers: [AppsService],
+	imports: [LibraryModule, DevModule],
 })
 export class AppsModule {}

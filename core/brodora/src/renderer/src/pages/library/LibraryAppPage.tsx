@@ -2,9 +2,9 @@ import { Stack, Typography } from "@brodora/ui";
 import { useParams } from "react-router-dom";
 import { useLibraryApps } from "../../library/useLibraryApps";
 
-export function LibraryCatalogItemPage() {
+export function LibraryAppPage() {
 	const { id } = useParams<{ id: string }>();
-	const rows = useLibraryApps();
+	const { rows } = useLibraryApps();
 	const numericId = id != null ? Number.parseInt(id, 10) : Number.NaN;
 	const row = rows.find((r) => r.id === numericId);
 
@@ -21,7 +21,7 @@ export function LibraryCatalogItemPage() {
 						style={{ margin: 0 }}
 						sx={{ color: (t) => t.colors.secondary.onMain }}
 					>
-						{row.appId} · {row.type}
+						{row.appId} · {row.sourceType}
 					</Typography>
 					<Typography
 						variant="body-sm"

@@ -10,7 +10,7 @@ export class LibraryAppsTable1775318970103 implements MigrationInterface {
 				"user_id" integer NOT NULL,
 				"app_id" varchar NOT NULL,
 				"name" varchar NOT NULL,
-				"type" varchar NOT NULL,
+				"source_type" varchar NOT NULL,
 				"source_ref" varchar NOT NULL,
 				"added_at" varchar NOT NULL,
 				CONSTRAINT "FK_library_apps_user_id" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE

@@ -1,12 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("library_apps")
-export class LibraryApp {
+@Entity("dev_apps")
+export class DevApp {
 	@PrimaryGeneratedColumn()
 	id!: number;
-
-	@Column({ name: "user_id", type: "integer" })
-	userId!: number;
 
 	@Column({ name: "app_id", type: "varchar" })
 	appId!: string;
@@ -14,11 +11,11 @@ export class LibraryApp {
 	@Column({ type: "varchar" })
 	name!: string;
 
-	@Column({ type: "varchar" })
-	type!: string;
+	@Column({ name: "source_path", type: "varchar" })
+	sourcePath!: string;
 
-	@Column({ name: "source_ref", type: "varchar" })
-	sourceRef!: string;
+	@Column({ name: "dev_script", type: "varchar" })
+	devScript!: string;
 
 	@Column({ name: "added_at", type: "varchar" })
 	addedAt!: string;
