@@ -204,7 +204,7 @@ export function LockScreen() {
 										<Button
 											key={u.id}
 											type="button"
-											color="secondary"
+											color="background"
 											onClick={() =>
 												handleSelectUser({ id: u.id, name: u.name })
 											}

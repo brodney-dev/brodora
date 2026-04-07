@@ -55,22 +55,22 @@ export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
 			outline: "none",
 			...(isDisabled
 				? {
-						borderColor: colors.neutral.border,
-						backgroundColor: colors.secondary.container,
-						color: colors.secondary.onMain,
+						borderColor: colors.background.border,
+						backgroundColor: colors.background.container,
+						color: colors.background.onContainer,
 						opacity: 0.85,
 					}
 				: active
 					? {
-							borderColor: colors.neutral.border,
-							backgroundColor: colors.neutral.main,
-							color: colors.neutral.onMain,
+							borderColor: colors.background.border,
+							backgroundColor: colors.background.container,
+							color: colors.background.onContainer,
 							fontWeight: 600,
 						}
 					: {
 							borderColor: "transparent",
 							backgroundColor: "transparent",
-							color: colors.secondary.onContainer,
+							color: colors.background.onContainer,
 							fontWeight: 500,
 						}),
 			...sxStyles,

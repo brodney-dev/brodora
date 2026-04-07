@@ -62,6 +62,11 @@ export function ProfileMenu({ fullWidth = false }: ProfileMenuProps) {
 							color="secondary"
 							startNode={<Avatar alt={user.name} size={22} fallback="?" />}
 							endNode={<ChevronDown size={14} aria-hidden />}
+							sx={{
+								background: (t) => t.colors.background.container,
+								color: (t) => t.colors.background.onContainer,
+								border: (t) => `1px solid ${t.colors.background.border}`,
+							}}
 							style={{
 								padding: "0.15rem 0.4rem",
 								fontSize: "0.6875rem",

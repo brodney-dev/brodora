@@ -78,8 +78,12 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 
 	/**
 	 * @param appRoot - Directory to pass as `cwd` for `electron .` (default: monorepo `core/test-app`).
+	 * @param label - Process label for logs and launched-apps UI.
 	 */
-	launch(appRoot: string = this.defaultTestAppRoot()): ChildProcess {
+	launch(
+		appRoot: string = this.defaultTestAppRoot(),
+		label: string = "Test app",
+	): ChildProcess {
 		const electronBinary = process.execPath;
 
 		this.logger.log(`Launching app at ${appRoot}`);
@@ -97,7 +101,7 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 		});
 
 		this.registerProcess(proc, {
-			label: "Test app",
+			label,
 			mode: "production",
 			appRoot,
 		});

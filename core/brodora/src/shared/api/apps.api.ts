@@ -1,6 +1,15 @@
 import { z } from "zod";
 import { BrodoraApiHandler } from "./_common/api";
 
+export const libraryAppInstallSummarySchema = z.object({
+	id: z.number(),
+	installedPath: z.string(),
+	version: z.string(),
+	snapshotHash: z.string(),
+	installedAt: z.string(),
+	updatedAt: z.string(),
+});
+
 export const libraryAppRowSchema = z.object({
 	id: z.number(),
 	userId: z.number(),
@@ -11,6 +20,8 @@ export const libraryAppRowSchema = z.object({
 	manifest: z.string(),
 	manifestHash: z.string(),
 	addedAt: z.string(),
+	install: libraryAppInstallSummarySchema.nullable(),
+	updateAvailable: z.boolean(),
 });
 
 export type LibraryAppRow = z.infer<typeof libraryAppRowSchema>;
@@ -64,6 +75,26 @@ export type AddLocalLibraryAppFromDialogResult = z.infer<
 	typeof addLocalLibraryAppFromDialogResultSchema
 >;
 
+export const installLibraryAppResultSchema = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true) }),
+	z.object({
+		ok: z.literal(false),
+		reason: z.enum([
+			"not_logged_in",
+			"not_found",
+			"not_local",
+			"already_installed",
+			"invalid_manifest",
+			"source_missing",
+			"copy_failed",
+		]),
+	}),
+]);
+
+export type InstallLibraryAppResult = z.infer<
+	typeof installLibraryAppResultSchema
+>;
+
 export const AppsApi = {
 	/** Rows in `library_apps` for the currently logged-in user (empty if none). */
 	listLibraryApps: new BrodoraApiHandler({
@@ -92,5 +123,20 @@ export const AppsApi = {
 		key: "apps:addLocalLibraryAppFromDialog",
 		inputValidator: z.void(),
 		outputValidator: addLocalLibraryAppFromDialogResultSchema,
+	}),
+	/**
+	 * Copies a local library app into `userData/apps/<userId>/<appId>/lib`, records `app_installs`,
+	 * and links it from `library_apps`.
+	 */
+	installLibraryApp: new BrodoraApiHandler({
+		key: "apps:installLibraryApp",
+		inputValidator: z.object({ libraryAppId: z.number().int().positive() }),
+		outputValidator: installLibraryAppResultSchema,
+	}),
+	/** Spawns the installed Electron app (`electron .` at `installed_path`). */
+	launchLibraryApp: new BrodoraApiHandler({
+		key: "apps:launchLibraryApp",
+		inputValidator: z.object({ libraryAppId: z.number().int().positive() }),
+		outputValidator: z.boolean(),
 	}),
 };

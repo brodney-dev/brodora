@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from "typeorm";
+import { AppInstall } from "../installs/app-install.entity";
 
 @Entity("library_apps")
 export class LibraryApp {
@@ -25,6 +32,10 @@ export class LibraryApp {
 
 	@Column({ name: "manifest_hash", type: "varchar" })
 	manifestHash!: string; // hash of manifest for quick change detection
+
+	@ManyToOne(() => AppInstall, { nullable: true, onDelete: "SET NULL" })
+	@JoinColumn({ name: "app_install_id" })
+	appInstall?: AppInstall | null;
 
 	@Column({ name: "added_at", type: "varchar" })
 	addedAt!: string;

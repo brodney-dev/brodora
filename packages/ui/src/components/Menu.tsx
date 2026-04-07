@@ -192,10 +192,10 @@ export const MenuContent = React.forwardRef<HTMLDivElement, MenuContentProps>(
 			maxWidth: "min(20rem, calc(100vw - 2rem))",
 			padding: "0.35rem 0",
 			borderRadius: `${shape.borderRadius}px`,
-			border: `1px solid ${colors.neutral.border}`,
+			border: `1px solid ${colors.background.border}`,
 			background: colors.background.container,
-			color: colors.secondary.onContainer,
-			boxShadow: `0 18px 45px -20px ${hexToRgba(colors.secondary.onContainer, 0.14)}`,
+			color: colors.background.onContainer,
+			boxShadow: `0 18px 45px -20px ${hexToRgba(colors.background.onContainer, 0.14)}`,
 			...(() => {
 				const isTop = placement.startsWith("top");
 				const isEnd = placement.endsWith("end");
@@ -281,7 +281,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, MenuItemProps>(
 			fontSize: "0.875rem",
 			border: "none",
 			background: "transparent",
-			color: colors.secondary.onContainer,
+			color: colors.background.onContainer,
 			cursor: "pointer",
 			...sxStyles,
 			...style,
@@ -323,7 +323,7 @@ export function MenuSeparator({ sx, style }: MenuSeparatorProps) {
 			style={{
 				height: 1,
 				margin: "0.35rem 0",
-				backgroundColor: colors.neutral.border,
+				backgroundColor: colors.background.border,
 				border: "none",
 				...sxStyles,
 				...style,

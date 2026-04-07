@@ -18,7 +18,7 @@ export function AppLayout() {
 						minWidth: 0,
 						overflow: "hidden",
 						backgroundColor: colors.background.main,
-						p: 1.25,
+						p: 2,
 						boxSizing: "border-box",
 					}}
 				>
@@ -29,7 +29,7 @@ export function AppLayout() {
 							flex: 1,
 							minHeight: 0,
 							minWidth: 0,
-							gap: 1,
+							gap: 2,
 						}}
 					>
 						<AppSidebar />

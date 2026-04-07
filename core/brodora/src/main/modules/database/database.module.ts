@@ -4,6 +4,7 @@ import { type DynamicModule, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { app } from "electron";
 import { DevApp } from "../apps/dev/dev-app.entity";
+import { AppInstall } from "../apps/installs/app-install.entity";
 import { LibraryApp } from "../apps/library/library-app.entity";
 import { User } from "../users/user.entity";
 
@@ -24,7 +25,7 @@ export class DatabaseModule {
 						return {
 							type: "better-sqlite3" as const,
 							database,
-							entities: [User, LibraryApp, DevApp],
+							entities: [User, LibraryApp, DevApp, AppInstall],
 							migrations: isDev
 								? ["src/main/migrations/*.ts"]
 								: ["dist/main/migrations/*.js"],

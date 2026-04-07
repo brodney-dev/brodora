@@ -44,6 +44,7 @@ export class LibraryService implements OnModuleInit {
 		}
 		const rows = await this.libraryAppRepo.find({
 			where: { userId: session.id },
+			relations: { appInstall: true },
 			order: { addedAt: "DESC" },
 		});
 		return rows.map((r) => this.toRow(r));
@@ -132,6 +133,7 @@ export class LibraryService implements OnModuleInit {
 	}
 
 	private toRow(r: LibraryApp): LibraryAppRow {
+		const inst = r.appInstall;
 		return {
 			id: r.id,
 			userId: r.userId,
@@ -142,6 +144,18 @@ export class LibraryService implements OnModuleInit {
 			manifest: r.manifest,
 			manifestHash: r.manifestHash,
 			addedAt: r.addedAt,
+			install:
+				inst != null
+					? {
+							id: inst.id,
+							installedPath: inst.installedPath,
+							version: inst.version,
+							snapshotHash: inst.snapshotHash,
+							installedAt: inst.installedAt,
+							updatedAt: inst.updatedAt,
+						}
+					: null,
+			updateAvailable: inst != null && r.manifestHash !== inst.snapshotHash,
 		};
 	}
 }
