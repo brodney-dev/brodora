@@ -17,6 +17,7 @@ export const libraryAppRowSchema = z.object({
 	name: z.string(),
 	sourceType: z.string(),
 	sourceRef: z.string(),
+	manifestPath: z.string().nullable(),
 	manifest: z.string(),
 	manifestHash: z.string(),
 	addedAt: z.string(),
@@ -87,12 +88,32 @@ export const installLibraryAppResultSchema = z.discriminatedUnion("ok", [
 			"invalid_manifest",
 			"source_missing",
 			"copy_failed",
+			"installer_missing",
+			"remote_installer_not_supported",
 		]),
 	}),
 ]);
 
 export type InstallLibraryAppResult = z.infer<
 	typeof installLibraryAppResultSchema
+>;
+
+export const uninstallLibraryAppResultSchema = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true) }),
+	z.object({
+		ok: z.literal(false),
+		reason: z.enum([
+			"not_logged_in",
+			"not_found",
+			"not_local",
+			"not_installed",
+			"cleanup_failed",
+		]),
+	}),
+]);
+
+export type UninstallLibraryAppResult = z.infer<
+	typeof uninstallLibraryAppResultSchema
 >;
 
 export const AppsApi = {
@@ -125,13 +146,22 @@ export const AppsApi = {
 		outputValidator: addLocalLibraryAppFromDialogResultSchema,
 	}),
 	/**
-	 * Copies a local library app into `userData/apps/<userId>/<appId>/lib`, records `app_installs`,
-	 * and links it from `library_apps`.
+	 * Installs into `<userData>/storage/<userId>/apps/<appId>/`: Linux `.AppImage` from
+	 * `platforms.linux` when set, else copies the project tree into `lib`.
 	 */
 	installLibraryApp: new BrodoraApiHandler({
 		key: "apps:installLibraryApp",
 		inputValidator: z.object({ libraryAppId: z.number().int().positive() }),
 		outputValidator: installLibraryAppResultSchema,
+	}),
+	/**
+	 * Deletes `storage/<userId>/apps/<appId>/`, clears `library_apps.app_install_id`, and
+	 * removes the `app_installs` row.
+	 */
+	uninstallLibraryApp: new BrodoraApiHandler({
+		key: "apps:uninstallLibraryApp",
+		inputValidator: z.object({ libraryAppId: z.number().int().positive() }),
+		outputValidator: uninstallLibraryAppResultSchema,
 	}),
 	/** Spawns the installed Electron app (`electron .` at `installed_path`). */
 	launchLibraryApp: new BrodoraApiHandler({

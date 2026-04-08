@@ -42,7 +42,7 @@ export default function App() {
 		<div style={{ padding: 16, fontFamily: "system-ui" }}>
 			<h1 style={{ fontSize: 18, marginBottom: 12 }}>User from Brodora</h1>
 			<dl style={{ margin: 0, display: "grid", gap: 8 }}>
-				<dt style={{ fontWeight: 600 }}>id</dt>
+				<dt style={{ fontWeight: 600 }}>id2</dt>
 				<dd style={{ margin: 0 }}>{user.id}</dd>
 				<dt style={{ fontWeight: 600 }}>name</dt>
 				<dd style={{ margin: 0 }}>{user.name}</dd>

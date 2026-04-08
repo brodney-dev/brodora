@@ -27,6 +27,10 @@ export class LibraryApp {
 	@Column({ name: "source_ref", type: "varchar" })
 	sourceRef!: string;
 
+	/** Absolute path to the `.brodora` file when added (used to resolve `platforms.*`). */
+	@Column({ name: "manifest_path", type: "varchar", nullable: true })
+	manifestPath!: string | null;
+
 	@Column({ name: "manifest", type: "varchar" })
 	manifest!: string; // JSON stringified app.brodora contents
 

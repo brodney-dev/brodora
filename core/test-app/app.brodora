@@ -5,5 +5,8 @@
   "version": "1.0.0",
   "apiVersion": "1.0.0",
   "main": "dist/main.js",
-  "devScript": "dev"
+  "devScript": "dev",
+  "platforms": {
+    "linux": "dist/test-app-1.0.0.AppImage"
+  }
 }

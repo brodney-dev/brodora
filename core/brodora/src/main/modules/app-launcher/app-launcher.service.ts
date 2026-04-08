@@ -1,6 +1,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { join } from "node:path";
+import { statSync } from "node:fs";
+import { dirname, join } from "node:path";
 import {
 	Injectable,
 	Logger,
@@ -23,6 +24,61 @@ import { DevApp } from "../apps/dev/dev-app.entity";
  */
 /** Inherited from the parent Brodora `electron-vite dev` process; would load the wrong renderer. */
 const DEV_ENV_KEYS_TO_STRIP_FOR_CHILD = ["ELECTRON_RENDERER_URL"] as const;
+
+/**
+ * Minimal env keys copied when spawning another Electron AppImage. Using the parent
+ * `process.env` wholesale still leaks vars (e.g. `PWD`, `SHLVL`, `LD_LIBRARY_PATH`,
+ * `NODE_*`, `npm_*`) that break `require()` inside the child bundle.
+ */
+const APP_IMAGE_ENV_ALLOWLIST = new Set([
+	"PATH",
+	"HOME",
+	"USER",
+	"USERNAME",
+	"LOGNAME",
+	"SHELL",
+	"LANG",
+	"LC_ALL",
+	"LC_CTYPE",
+	"LC_MESSAGES",
+	"LANGUAGE",
+	"DISPLAY",
+	"WAYLAND_DISPLAY",
+	"WAYLAND_SOCKET",
+	"XDG_SESSION_TYPE",
+	"XDG_CURRENT_DESKTOP",
+	"MOZ_ENABLE_WAYLAND",
+	"DBUS_SESSION_BUS_ADDRESS",
+	"SSH_AUTH_SOCK",
+	"TEMP",
+	"TMPDIR",
+	"TMP",
+	"TERM",
+	"CI",
+	"DESKTOP_SESSION",
+	"SUDO_USER",
+	"COLORTERM",
+	"GNOME_SHELL_SESSION_MODE",
+	"ORIGINAL_XDG_CURRENT_DESKTOP",
+	"GDK_BACKEND",
+	"CLUTTER_BACKEND",
+	"APPDIR",
+	"APPIMAGE",
+	"OWD",
+	"ARGV0",
+]);
+
+function appImageEnvKeyAllowed(key: string): boolean {
+	if (APP_IMAGE_ENV_ALLOWLIST.has(key)) {
+		return true;
+	}
+	return (
+		key.startsWith("XDG_") ||
+		key.startsWith("GTK_") ||
+		key.startsWith("QT_") ||
+		key.startsWith("FONTCONFIG_")
+	);
+}
 
 type TrackedProcess = {
 	proc: ChildProcess;
@@ -107,6 +163,53 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 		});
 
 		return proc;
+	}
+
+	/**
+	 * Launches an installed library app: `electron .` when `installedPath` is an app root
+	 * directory, or executes a Linux `.AppImage` when `installedPath` is that file.
+	 */
+	launchInstalledLibraryApp(
+		installedPath: string,
+		label: string,
+	): ChildProcess {
+		let st: ReturnType<typeof statSync>;
+		try {
+			st = statSync(installedPath);
+		} catch (err) {
+			const message = err instanceof Error ? err.message : String(err);
+			this.logger.error(`launchInstalledLibraryApp stat failed: ${message}`);
+			throw err;
+		}
+
+		if (st.isFile() && installedPath.toLowerCase().endsWith(".appimage")) {
+			this.logger.log(`Launching AppImage ${installedPath}`);
+			// Bundled Chromium needs the same sandbox workaround as `launch()` on Linux.
+			const appImageArgs =
+				process.platform === "linux"
+					? ["--no-sandbox", "--disable-setuid-sandbox"]
+					: [];
+			const proc = spawn(installedPath, appImageArgs, {
+				cwd: dirname(installedPath),
+				env: this.envForAppImageChild(),
+				stdio: ["ignore", "pipe", "pipe"],
+				detached: false,
+			});
+			this.registerProcess(proc, {
+				label,
+				mode: "production",
+				appRoot: installedPath,
+			});
+			return proc;
+		}
+
+		if (st.isDirectory()) {
+			return this.launch(installedPath, label);
+		}
+
+		throw new Error(
+			`Installed path is neither an app directory nor an AppImage: ${installedPath}`,
+		);
 	}
 
 	/**
@@ -211,6 +314,22 @@ export class AppLauncherService implements OnModuleInit, OnModuleDestroy {
 			...env,
 			BRODORA_HTTP_PORT: String(process.env.BRODORA_HTTP_PORT ?? "19842"),
 		};
+	}
+
+	/**
+	 * Fresh env for a foreign AppImage: allowlist only OS / desktop / AppImage vars so the
+	 * child never inherits Brodora’s Node, Electron, npm, Vite, or linker settings.
+	 */
+	private envForAppImageChild(): NodeJS.ProcessEnv {
+		const env: NodeJS.ProcessEnv = {};
+		for (const [key, value] of Object.entries(process.env)) {
+			if (value !== undefined && appImageEnvKeyAllowed(key)) {
+				env[key] = value;
+			}
+		}
+		env.NODE_ENV = "production";
+		env.BRODORA_HTTP_PORT = String(process.env.BRODORA_HTTP_PORT ?? "19842");
+		return env;
 	}
 
 	/** `core/test-app` next to `core/brodora` (from `out/main/index.js`, three levels up to `core`). */
