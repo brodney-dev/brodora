@@ -1,6 +1,11 @@
 import * as React from "react";
-import { type SxProps, useSxStyles } from "../system/sx";
-import { type ThemeColors, useTheme } from "../theme";
+import { ThemeColorPathFull } from "../system/color";
+import {
+	resolveThemeTokenString,
+	type SxProps,
+	useSxStyles,
+} from "../system/sx";
+import { useTheme } from "../theme";
 
 export type TypographyVariant =
 	| "display"
@@ -15,26 +20,12 @@ export type TypographyVariant =
 
 type IntrinsicTag = keyof React.JSX.IntrinsicElements;
 
-type TextTone = "foreground" | "muted" | "subtle";
-
-function toneColor(colors: ThemeColors, tone: TextTone): string {
-	switch (tone) {
-		case "foreground":
-			return colors.secondary.onContainer;
-		case "muted":
-			return colors.secondary.onMain;
-		case "subtle":
-			return colors.secondary.onMain;
-	}
-}
-
 const variantConfig: Record<
 	TypographyVariant,
-	{ defaultTag: IntrinsicTag; tone: TextTone; styles: React.CSSProperties }
+	{ defaultTag: IntrinsicTag; styles: React.CSSProperties }
 > = {
 	display: {
 		defaultTag: "h1",
-		tone: "foreground",
 		styles: {
 			fontSize: "2.5rem",
 			fontWeight: 700,
@@ -45,7 +36,6 @@ const variantConfig: Record<
 	},
 	title: {
 		defaultTag: "h2",
-		tone: "foreground",
 		styles: {
 			fontSize: "2rem",
 			fontWeight: 600,
@@ -56,7 +46,6 @@ const variantConfig: Record<
 	},
 	h1: {
 		defaultTag: "h1",
-		tone: "foreground",
 		styles: {
 			fontSize: "1.875rem",
 			fontWeight: 600,
@@ -67,7 +56,6 @@ const variantConfig: Record<
 	},
 	h2: {
 		defaultTag: "h2",
-		tone: "foreground",
 		styles: {
 			fontSize: "1.5rem",
 			fontWeight: 600,
@@ -77,7 +65,6 @@ const variantConfig: Record<
 	},
 	h3: {
 		defaultTag: "h3",
-		tone: "foreground",
 		styles: {
 			fontSize: "1.25rem",
 			fontWeight: 600,
@@ -87,7 +74,6 @@ const variantConfig: Record<
 	},
 	body: {
 		defaultTag: "p",
-		tone: "foreground",
 		styles: {
 			fontSize: "1rem",
 			fontWeight: 400,
@@ -97,7 +83,6 @@ const variantConfig: Record<
 	},
 	"body-sm": {
 		defaultTag: "p",
-		tone: "muted",
 		styles: {
 			fontSize: "0.875rem",
 			fontWeight: 400,
@@ -107,7 +92,6 @@ const variantConfig: Record<
 	},
 	caption: {
 		defaultTag: "span",
-		tone: "subtle",
 		styles: {
 			fontSize: "0.75rem",
 			fontWeight: 400,
@@ -117,7 +101,6 @@ const variantConfig: Record<
 	},
 	label: {
 		defaultTag: "span",
-		tone: "muted",
 		styles: {
 			fontSize: "0.75rem",
 			fontWeight: 600,
@@ -129,8 +112,11 @@ const variantConfig: Record<
 	},
 };
 
-export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
+export interface TypographyProps
+	extends Omit<React.HTMLAttributes<HTMLElement>, "color"> {
 	variant?: TypographyVariant;
+	/** Semantic ramp; text uses that ramp’s `main` token. Default: `inverse` → `theme.colors.inverse.main`. */
+	color?: ThemeColorPathFull;
 	as?: IntrinsicTag;
 	children: React.ReactNode;
 	sx?: SxProps;
@@ -138,13 +124,14 @@ export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
 
 export function Typography({
 	variant = "body",
+	color = "inverse.main",
 	as,
 	children,
 	style,
 	sx,
 	...rest
 }: TypographyProps) {
-	const { colors } = useTheme();
+	const theme = useTheme();
 	const sxStyles = useSxStyles(sx);
 	const config = variantConfig[variant];
 	const Tag = (as ?? config.defaultTag) as React.ElementType;
@@ -155,7 +142,7 @@ export function Typography({
 			...rest,
 			style: {
 				...config.styles,
-				color: toneColor(colors, config.tone),
+				color: resolveThemeTokenString(theme, color),
 				...sxStyles,
 				...style,
 			},

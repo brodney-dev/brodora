@@ -80,7 +80,7 @@ export const defaultThemeColors: ThemeColors = {
 export const defaultTheme: Theme = {
 	colors: defaultThemeColors,
 	action: defaultThemeAction,
-	shape: { borderRadius: 4 },
+	shape: { borderRadius: 2 },
 	spacingUnit: defaultSpacingUnit,
 	spacing: createSpacing(defaultSpacingUnit),
 };
